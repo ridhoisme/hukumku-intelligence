@@ -57,3 +57,145 @@
 .recharts-sector:focus {
   @apply outline-none;
 }
+
+.ant-pagination.ant-table-pagination {
+  @apply w-full;
+}
+
+.ant-pagination .ant-pagination-total-text {
+  @apply flex-1 font-work;
+}
+
+.ant-pagination .ant-pagination-options {
+  @apply flex-1;
+}
+
+.ant-pagination .ant-pagination-item {
+  @apply font-work;
+}
+
+.ant-pagination .ant-pagination-item {
+  @apply bg-transparent;
+}
+.ant-pagination .ant-pagination-item a {
+  @apply text-brand-black/50;
+}
+
+.ant-pagination .ant-pagination-item.ant-pagination-item-active {
+  @apply rounded-none border-none bg-brand-green-100;
+}
+
+.ant-pagination .ant-pagination-item.ant-pagination-item-active a {
+  @apply text-white;
+}
+
+.ant-pagination .ant-pagination-options .ant-select {
+  @apply float-end w-[150px] border-none;
+}
+
+.ant-pagination .ant-pagination-options .ant-select .ant-select-selector {
+  @apply !border-none bg-transparent font-work text-sm text-brand-black !shadow-none;
+}
+
+.ant-pagination .ant-pagination-options .ant-select .ant-select-arrow {
+  @apply ml-2 text-brand-black;
+}
+
+.ant-pagination .ant-pagination-options .ant-select .ant-select-arrow:after {
+  content: "items per page";
+  @apply pl-2 text-brand-black;
+}
+
+.ant-table-thead tr {
+  @apply !space-x-3 bg-brand-green-300;
+}
+
+.ant-table-thead .ant-table-cell {
+  @apply !w-fit !rounded-none !px-2 align-middle;
+}
+
+.ant-table-thead .ant-table-cell .ant-table-filter-column {
+  @apply w-min;
+}
+
+.ant-table-thead .ant-table-cell .ant-table-column-sorters {
+  @apply mx-auto w-fit justify-center;
+}
+
+.ant-table-thead .ant-table-cell:before {
+  @apply !content-none;
+}
+
+.ant-table .ant-table-cell {
+  @apply p-0 font-work;
+}
+
+.ant-input-search .ant-input-wrapper .ant-input-affix-wrapper {
+  @apply h-[58px] border-0;
+}
+
+.ant-input-search .ant-input-wrapper .ant-input-group-addon .ant-btn {
+  @apply h-[58px] w-[78px] border-0 bg-brand-green-100 text-white;
+}
+
+.ant-input-search
+  .ant-input-wrapper
+  .ant-input-group-addon
+  .ant-btn
+  .ant-btn-icon {
+  @apply text-white;
+}
+
+.ant-checkbox.ant-checkbox-checked .ant-checkbox-inner {
+  @apply !bg-brand-green-300;
+}
+
+.ant-checkbox-wrapper:hover .ant-checkbox-inner {
+  @apply !border-[#C1C1C1];
+}
+
+.ant-slider .ant-slider-track {
+  @apply rounded-none bg-brand-green-300;
+}
+
+.ant-slider:hover .ant-slider-track {
+  @apply bg-brand-green-300/65;
+}
+
+.ant-slider .ant-slider-handle:after {
+  box-shadow: 0 0 0 2px #007861;
+}
+
+.ant-slider:hover .ant-slider-handle:after {
+  box-shadow: 0 0 0 2px #007861;
+}
+
+.ant-slider .ant-slider-handle:hover:after,
+.ant-slider .ant-slider-handle:focus:after,
+.ant-slider .ant-slider-handle:active:after {
+  @apply outline-brand-green-300/50;
+}
+
+.ant-slider-tooltip .ant-tooltip-content .ant-tooltip-inner {
+  @apply bg-white font-work text-brand-black;
+}
+
+.ant-slider .ant-slider-mark .ant-slider-mark-text {
+  @apply font-work text-[10px] text-brand-black;
+}
+
+.ant-table-filter-dropdown ul li {
+  @apply font-work text-xs text-brand-black;
+}
+
+.ant-table-filter-dropdown ul li.ant-dropdown-menu-item-selected {
+  @apply !bg-transparent !text-brand-black;
+}
+
+.ant-table-filter-dropdown .ant-table-filter-dropdown-btns {
+  @apply !justify-end gap-2;
+}
+
+.ant-table-filter-dropdown .ant-table-filter-dropdown-btns button {
+  @apply bg-transparent text-xs text-brand-black shadow-none last:invisible last:font-medium last:text-brand-green-300 last:after:visible last:after:absolute last:after:left-0 last:after:top-1 last:after:content-['Filter'] disabled:text-brand-black/10;
+}

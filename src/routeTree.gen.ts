@@ -8,49 +8,64 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-import { createFileRoute } from '@tanstack/react-router'
-
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as LayoutImport } from './routes/_layout'
-import { Route as LawyerTabImport } from './routes/lawyer.$tab'
-
-// Create Virtual Routes
-
-const SearchLazyImport = createFileRoute('/search')()
-const AboutLazyImport = createFileRoute('/about')()
-const IndexLazyImport = createFileRoute('/')()
+import { Route as IndexImport } from './routes/index'
+import { Route as LayoutSearchImport } from './routes/_layout/_search'
+import { Route as LayoutTopicTabImport } from './routes/_layout/topic.$tab'
+import { Route as LayoutLawyerTabImport } from './routes/_layout/lawyer.$tab'
+import { Route as LayoutJudgeTabImport } from './routes/_layout/judge.$tab'
+import { Route as LayoutGeneralTabImport } from './routes/_layout/general.$tab'
+import { Route as LayoutSearchSearchImport } from './routes/_layout/_search/search'
 
 // Create/Update Routes
-
-const SearchLazyRoute = SearchLazyImport.update({
-  id: '/search',
-  path: '/search',
-  getParentRoute: () => rootRoute,
-} as any).lazy(() => import('./routes/search.lazy').then((d) => d.Route))
-
-const AboutLazyRoute = AboutLazyImport.update({
-  id: '/about',
-  path: '/about',
-  getParentRoute: () => rootRoute,
-} as any).lazy(() => import('./routes/about.lazy').then((d) => d.Route))
 
 const LayoutRoute = LayoutImport.update({
   id: '/_layout',
   getParentRoute: () => rootRoute,
 } as any)
 
-const IndexLazyRoute = IndexLazyImport.update({
+const IndexRoute = IndexImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRoute,
-} as any).lazy(() => import('./routes/index.lazy').then((d) => d.Route))
+} as any)
 
-const LawyerTabRoute = LawyerTabImport.update({
+const LayoutSearchRoute = LayoutSearchImport.update({
+  id: '/_search',
+  getParentRoute: () => LayoutRoute,
+} as any)
+
+const LayoutTopicTabRoute = LayoutTopicTabImport.update({
+  id: '/topic/$tab',
+  path: '/topic/$tab',
+  getParentRoute: () => LayoutRoute,
+} as any)
+
+const LayoutLawyerTabRoute = LayoutLawyerTabImport.update({
   id: '/lawyer/$tab',
   path: '/lawyer/$tab',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => LayoutRoute,
+} as any)
+
+const LayoutJudgeTabRoute = LayoutJudgeTabImport.update({
+  id: '/judge/$tab',
+  path: '/judge/$tab',
+  getParentRoute: () => LayoutRoute,
+} as any)
+
+const LayoutGeneralTabRoute = LayoutGeneralTabImport.update({
+  id: '/general/$tab',
+  path: '/general/$tab',
+  getParentRoute: () => LayoutRoute,
+} as any)
+
+const LayoutSearchSearchRoute = LayoutSearchSearchImport.update({
+  id: '/search',
+  path: '/search',
+  getParentRoute: () => LayoutSearchRoute,
 } as any)
 
 // Populate the FileRoutesByPath interface
@@ -61,7 +76,7 @@ declare module '@tanstack/react-router' {
       id: '/'
       path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof IndexLazyImport
+      preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
     '/_layout': {
@@ -71,80 +86,156 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutImport
       parentRoute: typeof rootRoute
     }
-    '/about': {
-      id: '/about'
-      path: '/about'
-      fullPath: '/about'
-      preLoaderRoute: typeof AboutLazyImport
-      parentRoute: typeof rootRoute
+    '/_layout/_search': {
+      id: '/_layout/_search'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof LayoutSearchImport
+      parentRoute: typeof LayoutImport
     }
-    '/search': {
-      id: '/search'
+    '/_layout/_search/search': {
+      id: '/_layout/_search/search'
       path: '/search'
       fullPath: '/search'
-      preLoaderRoute: typeof SearchLazyImport
-      parentRoute: typeof rootRoute
+      preLoaderRoute: typeof LayoutSearchSearchImport
+      parentRoute: typeof LayoutSearchImport
     }
-    '/lawyer/$tab': {
-      id: '/lawyer/$tab'
+    '/_layout/general/$tab': {
+      id: '/_layout/general/$tab'
+      path: '/general/$tab'
+      fullPath: '/general/$tab'
+      preLoaderRoute: typeof LayoutGeneralTabImport
+      parentRoute: typeof LayoutImport
+    }
+    '/_layout/judge/$tab': {
+      id: '/_layout/judge/$tab'
+      path: '/judge/$tab'
+      fullPath: '/judge/$tab'
+      preLoaderRoute: typeof LayoutJudgeTabImport
+      parentRoute: typeof LayoutImport
+    }
+    '/_layout/lawyer/$tab': {
+      id: '/_layout/lawyer/$tab'
       path: '/lawyer/$tab'
       fullPath: '/lawyer/$tab'
-      preLoaderRoute: typeof LawyerTabImport
-      parentRoute: typeof rootRoute
+      preLoaderRoute: typeof LayoutLawyerTabImport
+      parentRoute: typeof LayoutImport
+    }
+    '/_layout/topic/$tab': {
+      id: '/_layout/topic/$tab'
+      path: '/topic/$tab'
+      fullPath: '/topic/$tab'
+      preLoaderRoute: typeof LayoutTopicTabImport
+      parentRoute: typeof LayoutImport
     }
   }
 }
 
 // Create and export the route tree
 
+interface LayoutSearchRouteChildren {
+  LayoutSearchSearchRoute: typeof LayoutSearchSearchRoute
+}
+
+const LayoutSearchRouteChildren: LayoutSearchRouteChildren = {
+  LayoutSearchSearchRoute: LayoutSearchSearchRoute,
+}
+
+const LayoutSearchRouteWithChildren = LayoutSearchRoute._addFileChildren(
+  LayoutSearchRouteChildren,
+)
+
+interface LayoutRouteChildren {
+  LayoutSearchRoute: typeof LayoutSearchRouteWithChildren
+  LayoutGeneralTabRoute: typeof LayoutGeneralTabRoute
+  LayoutJudgeTabRoute: typeof LayoutJudgeTabRoute
+  LayoutLawyerTabRoute: typeof LayoutLawyerTabRoute
+  LayoutTopicTabRoute: typeof LayoutTopicTabRoute
+}
+
+const LayoutRouteChildren: LayoutRouteChildren = {
+  LayoutSearchRoute: LayoutSearchRouteWithChildren,
+  LayoutGeneralTabRoute: LayoutGeneralTabRoute,
+  LayoutJudgeTabRoute: LayoutJudgeTabRoute,
+  LayoutLawyerTabRoute: LayoutLawyerTabRoute,
+  LayoutTopicTabRoute: LayoutTopicTabRoute,
+}
+
+const LayoutRouteWithChildren =
+  LayoutRoute._addFileChildren(LayoutRouteChildren)
+
 export interface FileRoutesByFullPath {
-  '/': typeof IndexLazyRoute
-  '': typeof LayoutRoute
-  '/about': typeof AboutLazyRoute
-  '/search': typeof SearchLazyRoute
-  '/lawyer/$tab': typeof LawyerTabRoute
+  '/': typeof IndexRoute
+  '': typeof LayoutSearchRouteWithChildren
+  '/search': typeof LayoutSearchSearchRoute
+  '/general/$tab': typeof LayoutGeneralTabRoute
+  '/judge/$tab': typeof LayoutJudgeTabRoute
+  '/lawyer/$tab': typeof LayoutLawyerTabRoute
+  '/topic/$tab': typeof LayoutTopicTabRoute
 }
 
 export interface FileRoutesByTo {
-  '/': typeof IndexLazyRoute
-  '': typeof LayoutRoute
-  '/about': typeof AboutLazyRoute
-  '/search': typeof SearchLazyRoute
-  '/lawyer/$tab': typeof LawyerTabRoute
+  '/': typeof IndexRoute
+  '': typeof LayoutSearchRouteWithChildren
+  '/search': typeof LayoutSearchSearchRoute
+  '/general/$tab': typeof LayoutGeneralTabRoute
+  '/judge/$tab': typeof LayoutJudgeTabRoute
+  '/lawyer/$tab': typeof LayoutLawyerTabRoute
+  '/topic/$tab': typeof LayoutTopicTabRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
-  '/': typeof IndexLazyRoute
-  '/_layout': typeof LayoutRoute
-  '/about': typeof AboutLazyRoute
-  '/search': typeof SearchLazyRoute
-  '/lawyer/$tab': typeof LawyerTabRoute
+  '/': typeof IndexRoute
+  '/_layout': typeof LayoutRouteWithChildren
+  '/_layout/_search': typeof LayoutSearchRouteWithChildren
+  '/_layout/_search/search': typeof LayoutSearchSearchRoute
+  '/_layout/general/$tab': typeof LayoutGeneralTabRoute
+  '/_layout/judge/$tab': typeof LayoutJudgeTabRoute
+  '/_layout/lawyer/$tab': typeof LayoutLawyerTabRoute
+  '/_layout/topic/$tab': typeof LayoutTopicTabRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '' | '/about' | '/search' | '/lawyer/$tab'
+  fullPaths:
+    | '/'
+    | ''
+    | '/search'
+    | '/general/$tab'
+    | '/judge/$tab'
+    | '/lawyer/$tab'
+    | '/topic/$tab'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '' | '/about' | '/search' | '/lawyer/$tab'
-  id: '__root__' | '/' | '/_layout' | '/about' | '/search' | '/lawyer/$tab'
+  to:
+    | '/'
+    | ''
+    | '/search'
+    | '/general/$tab'
+    | '/judge/$tab'
+    | '/lawyer/$tab'
+    | '/topic/$tab'
+  id:
+    | '__root__'
+    | '/'
+    | '/_layout'
+    | '/_layout/_search'
+    | '/_layout/_search/search'
+    | '/_layout/general/$tab'
+    | '/_layout/judge/$tab'
+    | '/_layout/lawyer/$tab'
+    | '/_layout/topic/$tab'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
-  IndexLazyRoute: typeof IndexLazyRoute
-  LayoutRoute: typeof LayoutRoute
-  AboutLazyRoute: typeof AboutLazyRoute
-  SearchLazyRoute: typeof SearchLazyRoute
-  LawyerTabRoute: typeof LawyerTabRoute
+  IndexRoute: typeof IndexRoute
+  LayoutRoute: typeof LayoutRouteWithChildren
 }
 
 const rootRouteChildren: RootRouteChildren = {
-  IndexLazyRoute: IndexLazyRoute,
-  LayoutRoute: LayoutRoute,
-  AboutLazyRoute: AboutLazyRoute,
-  SearchLazyRoute: SearchLazyRoute,
-  LawyerTabRoute: LawyerTabRoute,
+  IndexRoute: IndexRoute,
+  LayoutRoute: LayoutRouteWithChildren,
 }
 
 export const routeTree = rootRoute
@@ -158,26 +249,48 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/_layout",
-        "/about",
-        "/search",
-        "/lawyer/$tab"
+        "/_layout"
       ]
     },
     "/": {
-      "filePath": "index.lazy.tsx"
+      "filePath": "index.tsx"
     },
     "/_layout": {
-      "filePath": "_layout.tsx"
+      "filePath": "_layout.tsx",
+      "children": [
+        "/_layout/_search",
+        "/_layout/general/$tab",
+        "/_layout/judge/$tab",
+        "/_layout/lawyer/$tab",
+        "/_layout/topic/$tab"
+      ]
     },
-    "/about": {
-      "filePath": "about.lazy.tsx"
+    "/_layout/_search": {
+      "filePath": "_layout/_search.tsx",
+      "parent": "/_layout",
+      "children": [
+        "/_layout/_search/search"
+      ]
     },
-    "/search": {
-      "filePath": "search.lazy.tsx"
+    "/_layout/_search/search": {
+      "filePath": "_layout/_search/search.tsx",
+      "parent": "/_layout/_search"
     },
-    "/lawyer/$tab": {
-      "filePath": "lawyer.$tab.tsx"
+    "/_layout/general/$tab": {
+      "filePath": "_layout/general.$tab.tsx",
+      "parent": "/_layout"
+    },
+    "/_layout/judge/$tab": {
+      "filePath": "_layout/judge.$tab.tsx",
+      "parent": "/_layout"
+    },
+    "/_layout/lawyer/$tab": {
+      "filePath": "_layout/lawyer.$tab.tsx",
+      "parent": "/_layout"
+    },
+    "/_layout/topic/$tab": {
+      "filePath": "_layout/topic.$tab.tsx",
+      "parent": "/_layout"
     }
   }
 }

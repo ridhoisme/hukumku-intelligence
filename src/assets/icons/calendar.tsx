@@ -1,10 +1,11 @@
-const CalendarSvgIcon = () => (
+const CalendarSvgIcon = ({ className }: { className?: string }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width="18"
     height="18"
     fill="none"
     viewBox="0 0 18 18"
+    className={className}
   >
     <path
       stroke="#6C7677"

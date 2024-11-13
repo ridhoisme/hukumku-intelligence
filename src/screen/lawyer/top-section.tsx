@@ -32,7 +32,7 @@ function TopSectionLawyer() {
         <div className="flex gap-1">
           <CalendarSvgIcon />
           <span className="paragraph-14 text-brand-grey-100">
-            Data update dari 10/10/2020 - 10/10/2024
+            Data terbaru dari 10/10/2020 - 10/10/2024
           </span>
         </div>
         <div className="paragraph-14 flex gap-6 pt-8">
@@ -42,10 +42,23 @@ function TopSectionLawyer() {
                 className={cn(
                   "h-8 cursor-pointer hover:text-brand-black-2",
                   isActive &&
-                    "border-brand-green-100 text-brand-green-100 border-b-2 font-semibold",
+                    "border-b-2 border-brand-green-100 font-semibold text-brand-green-100",
                 )}
               >
                 Analisis
+              </div>
+            )}
+          </Link>
+          <Link to="/lawyer/$tab" params={{ tab: "case-list" }}>
+            {({ isActive }) => (
+              <div
+                className={cn(
+                  "h-8 cursor-pointer hover:text-brand-black-2",
+                  isActive &&
+                    "border-b-2 border-brand-green-100 font-semibold text-brand-green-100",
+                )}
+              >
+                List Kasus
               </div>
             )}
           </Link>
@@ -55,7 +68,7 @@ function TopSectionLawyer() {
                 className={cn(
                   "h-8 cursor-pointer hover:text-brand-black-2",
                   isActive &&
-                    "border-brand-green-100 text-brand-green-100 border-b-2 font-semibold",
+                    "border-b-2 border-brand-green-100 font-semibold text-brand-green-100",
                 )}
               >
                 Custom Analisis

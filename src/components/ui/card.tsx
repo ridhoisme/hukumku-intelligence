@@ -4,7 +4,8 @@ import { cn } from "../../utils/tw";
 type Card = {
   children: ReactNode;
   title: string;
-  className: string;
+  className?: string;
+  id?: string;
 };
 
 export const CardTitle = ({ str }: { str: string }) => {
@@ -18,6 +19,7 @@ export const CardTitle = ({ str }: { str: string }) => {
 export function Card({ children, ...props }: Card) {
   return (
     <div
+      {...props}
       className={cn("flex flex-col rounded-[10px] bg-white", props.className)}
     >
       {props.title && <CardTitle str={props.title} />}

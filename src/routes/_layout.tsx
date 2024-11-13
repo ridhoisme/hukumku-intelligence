@@ -1,14 +1,22 @@
-import { createFileRoute, Outlet } from "@tanstack/react-router";
+import { Outlet, createFileRoute } from "@tanstack/react-router";
+import { Layout } from "antd";
+import Header from "../components/header";
 
 export const Route = createFileRoute("/_layout")({
-  component: RouteComponent,
+  component: LayoutComponent,
 });
 
-function RouteComponent() {
+const { Content } = Layout;
+
+function LayoutComponent() {
   return (
-    <footer>
-      root layout
-      <Outlet />
-    </footer>
+    <>
+      <Layout className="min-h-screen font-work">
+        <Header />
+        <Content>
+          <Outlet />
+        </Content>
+      </Layout>
+    </>
   );
 }

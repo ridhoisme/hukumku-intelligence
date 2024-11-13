@@ -13,10 +13,17 @@ export default {
           black: "#010101",
           "black-2": "#1E1E1E",
           navy: "#002A40",
+          blue: { 100: "#0077B5" },
         },
+        granted: "var(--color-granted)",
+        rejected: "var(--color-rejected)",
+        partially: "var(--color-partially)",
       },
       fontFamily: {
         work: ["Work Sans", "sans-serif"],
+      },
+      boxShadow: {
+        brand: "0px 4px 20px 0px #012D411A",
       },
     },
   },

@@ -1,20 +1,18 @@
-import { createRootRoute, Outlet } from "@tanstack/react-router";
-import { TanStackRouterDevtools } from "@tanstack/router-devtools";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import { Layout } from "antd";
-import Header from "../components/header";
-
-const { Content } = Layout;
+import {
+  createRootRoute,
+  Outlet,
+  ScrollRestoration,
+} from "@tanstack/react-router";
+import { TanStackRouterDevtools } from "@tanstack/router-devtools";
+import NotFound from "../screen/not-found";
 
 export const Route = createRootRoute({
+  notFoundComponent: NotFound,
   component: () => (
     <>
-      <Layout className="font-work min-h-screen">
-        <Header />
-        <Content>
-          <Outlet />
-        </Content>
-      </Layout>
+      <Outlet />
+      <ScrollRestoration />
       <ReactQueryDevtools />
       <TanStackRouterDevtools />
     </>
