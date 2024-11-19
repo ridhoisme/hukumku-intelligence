@@ -3,6 +3,9 @@ import { Checkbox, Select, Slider, SliderSingleProps } from "antd";
 import { TOPIC } from "../../../consts";
 import { cn } from "../../../utils/tw";
 import { useState } from "react";
+import { useSuspenseQueries } from "@tanstack/react-query";
+import { getLocations } from "../../../queries/location";
+import { Locations } from "../../../type/location";
 
 const routeApi = getRouteApi("/_layout/_search/search");
 
@@ -19,6 +22,11 @@ export default function FilterCard() {
   const formatter: NonNullable<SliderSingleProps["tooltip"]>["formatter"] = (
     value,
   ) => `${value}%`;
+
+  const result = useSuspenseQueries({
+    queries: [getLocations<Locations>({ fields: ["name"] })],
+    combine: (res) => ({ location: res[0].data.data }),
+  });
 
   return (
     <div className="flex h-fit w-[326px] flex-col rounded-[10px] bg-white p-4">
@@ -109,20 +117,10 @@ export default function FilterCard() {
         </div>
         <Select
           onChange={(val) => navigate({ search: { ...search, location: val } })}
-          options={[
-            {
-              value: "Jakarta",
-              label: "Jakarta",
-            },
-            {
-              value: "Bandung",
-              label: "Bandung",
-            },
-            {
-              value: "Surabaya",
-              label: "Surabaya",
-            },
-          ]}
+          options={result.location.data.map((val) => ({
+            label: val.name,
+            value: val.name,
+          }))}
           value={search.location}
           showSearch
           placeholder="Search"

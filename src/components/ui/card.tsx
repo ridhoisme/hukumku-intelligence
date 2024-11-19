@@ -20,7 +20,10 @@ export function Card({ children, ...props }: Card) {
   return (
     <div
       {...props}
-      className={cn("flex flex-col rounded-[10px] bg-white", props.className)}
+      className={cn(
+        "flex cursor-pointer flex-col rounded-[10px] bg-white",
+        props.className,
+      )}
     >
       {props.title && <CardTitle str={props.title} />}
       <div className="h-full w-full">{children}</div>

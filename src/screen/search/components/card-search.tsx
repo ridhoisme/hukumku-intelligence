@@ -5,47 +5,66 @@ import { Label, Pie, PieChart } from "recharts";
 import CalendarSvgIcon from "../../../assets/icons/calendar";
 import { ChartConfig, ChartContainer } from "../../../components/ui/chart";
 import { InfoCircleOutlined } from "@ant-design/icons";
+import { formatDate } from "../../../utils/date";
 
 type CardSearchProps = {
   document?: number;
   showDetail?: boolean;
   showAvatar?: boolean;
+  title: string;
+  location?: string;
+  createdAt?: string;
+  updatedAt: string;
+  topic?: string;
+  granted?: number;
+  rejected?: number;
+  partially?: number;
 };
 
-const chartData = [
-  {
-    key: "rejected",
-    data: 14,
-    fill: "var(--color-rejected)",
+const chartConfig = {
+  granted: {
+    label: "Dikabulkan Total",
+    color: "hsl(var(--chart-1))",
   },
-  { key: "granted", data: 15, fill: "var(--color-granted)" },
-  { key: "partially", data: 30, fill: "var(--color-partially)" },
-];
+  rejected: {
+    label: "Ditolak",
+    color: "hsl(var(--chart-2))",
+  },
+  partially: {
+    label: "Dikabulkan Sebagian",
+    color: "hsl(var(--chart-3))",
+  },
+} satisfies ChartConfig;
 
 export default function CardSearch({
   document,
   showDetail = true,
   showAvatar = true,
+  title,
+  location = "",
+  topic,
+  rejected = 0,
+  granted = 0,
+  partially = 0,
+  updatedAt,
 }: CardSearchProps) {
-  const chartConfig = {
-    granted: {
-      label: "Dikabulkan Total",
-      color: "hsl(var(--chart-1))",
-    },
-    rejected: {
-      label: "Ditolak",
-      color: "hsl(var(--chart-2))",
-    },
-    partially: {
-      label: "Dikabulkan Sebagian",
-      color: "hsl(var(--chart-3))",
-    },
-  } satisfies ChartConfig;
   const navigate = useNavigate();
+
+  const chartData = useMemo(() => {
+    return [
+      {
+        key: "rejected",
+        data: rejected,
+        fill: "var(--color-rejected)",
+      },
+      { key: "granted", data: granted, fill: "var(--color-granted)" },
+      { key: "partially", data: partially, fill: "var(--color-partially)" },
+    ];
+  }, [granted, partially, rejected]);
 
   const totalValue = useMemo(() => {
     return chartData.reduce((acc, curr) => acc + curr.data, 0);
-  }, []);
+  }, [chartData]);
 
   return (
     <div
@@ -62,7 +81,7 @@ export default function CardSearch({
             </div>
           )}
           <Link className="line-clamp-2 font-work font-semibold text-brand-blue-100 hover:text-brand-blue-100/75">
-            Fritz Paris Junior Hutapea, S.H., LL. B.
+            {title}
           </Link>
         </div>
         <div className="space-y-3">
@@ -73,7 +92,7 @@ export default function CardSearch({
                   Top Topik
                 </span>
                 <div className="text-xs font-medium leading-[14px]">
-                  Gono Gini
+                  {topic}
                 </div>
               </div>
               <div className="font-work">
@@ -97,14 +116,16 @@ export default function CardSearch({
                     </div>
                   </div>
                 </Tooltip>
-                <div className="text-xs font-medium leading-[14px]">98%</div>
+                <div className="text-xs font-medium leading-[14px]">
+                  Coming Soon
+                </div>
               </div>
               <div className="font-work">
                 <span className="text-[10px] leading-3 text-brand-grey-100">
                   Top Lokasi
                 </span>
                 <div className="text-xs font-medium leading-[14px]">
-                  Pengadilan Negeri Jakarta Pusat
+                  {location}
                 </div>
               </div>
             </>
@@ -120,7 +141,7 @@ export default function CardSearch({
         <div className="flex items-center gap-1 font-work">
           <CalendarSvgIcon className="size-2" />
           <span className="text-[8px] text-brand-grey-100">
-            Data update dari 10/10/2020 - 10/10/2024
+            Update terbaru {formatDate(updatedAt)}
           </span>
         </div>
       </div>

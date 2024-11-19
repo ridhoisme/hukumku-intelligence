@@ -1,9 +1,9 @@
 import { SearchOutlined } from "@ant-design/icons";
+import { Link } from "@tanstack/react-router";
 import { Button, Input, InputRef, Space, TableColumnType } from "antd";
 import { useRef, useState } from "react";
 import Highlighter from "react-highlight-words";
 import { cn } from "../utils/tw";
-import { Link } from "@tanstack/react-router";
 
 interface ColumnSearchProps<T> {
   dataIndex: keyof T;

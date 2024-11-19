@@ -1,10 +1,10 @@
 import { Layout } from "antd";
-import Header from "../../components/header";
-import TopSection from "./top-section";
-import TableTrial from "./table-trial";
-import NewDecisionList from "./new-decision-list";
-import Article from "./article";
 import Footer from "../../components/footer";
+import Header from "../../components/header";
+import Article from "./article";
+import NewDecisionList from "./new-decision-list";
+import TableTrial from "./table-trial";
+import TopSection from "./top-section";
 
 const { Content } = Layout;
 

@@ -5,8 +5,12 @@ import { Input } from "antd";
 const { Search } = Input;
 const routeApi = getRouteApi("/_layout/_search/search");
 
-export default function SearchInput() {
-  const navigate = useNavigate({ from: "/search" });
+type SearchInput = {
+  defaultValue?: string;
+};
+
+export default function SearchInput({ defaultValue }: SearchInput) {
+  const navigate = useNavigate();
   const search = routeApi.useSearch();
 
   const handleSearch = (val: string) =>
@@ -21,6 +25,7 @@ export default function SearchInput() {
       placeholder="Search"
       enterButton={<SearchOutlined className="text-3xl" />}
       onSearch={handleSearch}
+      defaultValue={defaultValue}
     />
   );
 }

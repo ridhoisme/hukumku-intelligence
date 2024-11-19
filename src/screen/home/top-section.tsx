@@ -1,4 +1,5 @@
 import { SearchOutlined } from "@ant-design/icons";
+import { useSuspenseQueries } from "@tanstack/react-query";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { Input } from "antd";
 import HammerOutline from "../../assets/icons/hammer-outline";
@@ -7,14 +8,42 @@ import NeracaOutline from "../../assets/icons/neraca-outline";
 import PeopleOutline from "../../assets/icons/people-outline";
 import WorkBagOutline from "../../assets/icons/work-bag-outline";
 import HeroBg from "../../assets/images/bg-hero.png";
+import { getGenerals } from "../../queries/general";
+import { getJudges } from "../../queries/judge";
+import { getLawyers } from "../../queries/lawyer";
+import { getLocations } from "../../queries/location";
+import { getTopics } from "../../queries/topic";
+import { Lawyers } from "../../type/lawyer";
+import { Locations } from "../../type/location";
+import { Topics } from "../../type/topic";
+import { Generals } from "../../type/general";
+import { Judges } from "../../type/judge";
 
 const { Search } = Input;
 
 export default function TopSection() {
   const navigate = useNavigate({ from: "/" });
+  const result = useSuspenseQueries({
+    queries: [
+      getLocations<Locations>({ fields: "name" }),
+      getTopics<Topics>({ fields: "name" }),
+      getLawyers<Lawyers>({ fields: "name" }),
+      getGenerals<Generals>({ fields: "name" }),
+      getJudges<Judges>({ fields: "name" }),
+    ],
+    combine: (result) => {
+      return {
+        location: result[0].data.data,
+        topic: result[1].data.data,
+        lawyer: result[2].data.data,
+        general: result[3].data.data,
+        judge: result[4].data.data,
+      };
+    },
+  });
 
   const handleSearch = (val: string) =>
-    navigate({ to: "/search", search: { about: val } });
+    navigate({ to: "/search", search: { about: val, list: true } });
 
   return (
     <section className="relative flex h-[857px] justify-center bg-brand-navy">
@@ -46,7 +75,7 @@ export default function TopSection() {
                     Advokat
                   </span>
                   <h1 className="font-work text-4xl font-bold text-black">
-                    100
+                    {result.lawyer.meta.pagination.total}
                   </h1>
                 </div>
                 <NeracaOutline />
@@ -66,7 +95,7 @@ export default function TopSection() {
                     Hakim
                   </span>
                   <h1 className="font-work text-4xl font-bold text-black">
-                    100
+                    {result.judge.meta.pagination.total}
                   </h1>
                 </div>
                 <HammerOutline />
@@ -86,7 +115,7 @@ export default function TopSection() {
                     Umum
                   </span>
                   <h1 className="font-work text-4xl font-bold text-black">
-                    100
+                    {result.general.meta.pagination.total}
                   </h1>
                 </div>
                 <PeopleOutline />
@@ -109,7 +138,7 @@ export default function TopSection() {
                     Topik
                   </span>
                   <h1 className="font-work text-4xl font-bold text-black">
-                    100
+                    {result.topic.meta.pagination.total}
                   </h1>
                 </div>
                 <WorkBagOutline />
@@ -129,7 +158,7 @@ export default function TopSection() {
                     Lokasi Pengadilan
                   </span>
                   <h1 className="font-work text-4xl font-bold text-black">
-                    100
+                    {result.location.meta.pagination.total}
                   </h1>
                 </div>
                 <LocationOutline />

@@ -1,8 +1,18 @@
 import Empty from "../../../assets/images/not-found.png";
+import { cn } from "../../../utils/tw";
 
-export default function EmptyData() {
+type EmptyData = {
+  bordered?: boolean;
+};
+
+export default function EmptyData({ bordered = true }: EmptyData) {
   return (
-    <div className="flex h-full min-h-[381px] w-full items-center justify-center rounded-[10px] border border-black/10 bg-white">
+    <div
+      className={cn(
+        "flex h-full min-h-[381px] w-full items-center justify-center rounded-[10px] border-black/10 bg-white",
+        bordered && "border",
+      )}
+    >
       <div className="flex flex-col items-center space-y-3">
         <img src={Empty} alt="image" className="size-[200px]" />
         <h1 className="text-center font-work text-2xl font-semibold text-brand-black">

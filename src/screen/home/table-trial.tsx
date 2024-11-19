@@ -1,110 +1,28 @@
 import { Table, TableColumnsType } from "antd";
 import TableHead from "../../components/table/table-head";
 import { Link } from "@tanstack/react-router";
-
-type Trial = {
-  id: string;
-  nomor_perkara: string;
-  date_register: string;
-  topic: string;
-  member: {
-    penuntut_umum: string[] | null;
-    terdakwa: string[] | null;
-    penggugat: string[] | null;
-    tergugat: string[] | null;
-  };
-  on_going_proccess: number;
-  status: string;
-  location: string;
-};
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { getCases } from "../../queries/case";
+import { Case } from "../../type/case";
+import { daysToToday, formatDateToShort } from "../../utils/date";
 
 export default function TableTrial() {
-  const data: Trial[] = [
-    {
-      id: "1",
-      nomor_perkara: "263/Pdt.G/2024/PN Nga",
-      date_register: "06 Nov 2024",
-      topic: "Perceraian",
-      member: {
-        penggugat: null,
-        tergugat: null,
-        penuntut_umum: null,
-        terdakwa: null,
+  const { data: dataCase, isLoading } = useSuspenseQuery(
+    getCases({
+      filters: {
+        finish_date: {
+          $null: true,
+        },
       },
-      location: "Pengadilan Negeri Jakarta Pusat",
-      status: "Sidang pertama",
-      on_going_proccess: 1,
-    },
-    {
-      id: "2",
-      nomor_perkara: "263/Pdt.G/2024/PN Nga",
-      date_register: "06 Nov 2024",
-      topic: "Narkotika",
-      member: {
-        penggugat: null,
-        tergugat: null,
-        penuntut_umum: [
-          "Kadek Cintyadewi Permana,S.H.",
-          "Edwin Gama Pradana,S.H.",
-        ],
-        terdakwa: ["RADITA PUJI MAULANA", "EKA SAPTA FAUZI"],
-      },
-      location: "Pengadilan Negeri Jakarta Pusat",
-      status: "Sidang pertama",
-      on_going_proccess: 1,
-    },
-    {
-      id: "3",
-      nomor_perkara: "263/Pdt.G/2024/PN Nga",
-      date_register: "06 Nov 2024",
-      topic: "Perceraian",
-      member: {
-        penggugat: null,
-        tergugat: null,
-        penuntut_umum: null,
-        terdakwa: null,
-      },
-      location: "Pengadilan Negeri Jakarta Pusat",
-      status: "Sidang pertama",
-      on_going_proccess: 1,
-    },
-    {
-      id: "4",
-      nomor_perkara: "263/Pdt.G/2024/PN Nga",
-      date_register: "06 Nov 2024",
-      topic: "Perceraian",
-      member: {
-        penggugat: null,
-        tergugat: null,
-        penuntut_umum: null,
-        terdakwa: null,
-      },
-      location: "Pengadilan Negeri Jakarta Pusat",
-      status: "Minutasi",
-      on_going_proccess: 4,
-    },
-    {
-      id: "5",
-      nomor_perkara: "263/Pdt.G/2024/PN Nga",
-      date_register: "06 Nov 2024",
-      topic: "Perceraian",
-      member: {
-        penggugat: null,
-        tergugat: null,
-        penuntut_umum: null,
-        terdakwa: null,
-      },
-      location: "Pengadilan Negeri Jakarta Pusat",
-      status: "Sidang pertama",
-      on_going_proccess: 1,
-    },
-  ];
+      populate: "*",
+    }),
+  );
 
-  const columns: TableColumnsType<Trial> = [
+  const columns: TableColumnsType<Case> = [
     {
       title: () => <TableHead title="Nomor Perkara" />,
-      dataIndex: "nomor_perkara",
-      key: "nomor_perkara",
+      dataIndex: "case_number",
+      key: "case_number",
       width: 180,
       ellipsis: true,
       render: (val) => (
@@ -118,10 +36,11 @@ export default function TableTrial() {
     },
     {
       title: () => <TableHead title="Tanggal Register" noWrapTitle />,
-      dataIndex: "date_register",
-      key: "date_register",
+      dataIndex: "start_date",
+      key: "start_date",
       width: 140,
       align: "left",
+      render: (val) => formatDateToShort(val),
     },
     {
       title: () => <TableHead title="Topik Perkara" noWrapTitle />,
@@ -129,6 +48,7 @@ export default function TableTrial() {
       key: "topic",
       width: 140,
       align: "left",
+      render: (_, rec) => rec.topic.name,
     },
     {
       title: () => <TableHead title="Para Pihak" noWrapTitle />,
@@ -137,60 +57,24 @@ export default function TableTrial() {
       width: 152,
       align: "left",
       render: (_, rec) => {
-        const { penggugat, penuntut_umum, terdakwa, tergugat } = rec.member;
+        const { plaintiff, defendant } = rec;
 
         return (
           <div className="flex flex-col gap-2">
-            {penuntut_umum && terdakwa && (
-              <>
-                <div className="font-work text-xs text-brand-black">
-                  <span>Penuntut Umum:</span>
-                  <div>
-                    {penuntut_umum.map((val, i) => (
-                      <span key={i}>
-                        <Link
-                          href="#"
-                          className="text-brand-blue-100 hover:text-brand-blue-100/80"
-                        >
-                          {i + 1}. {val}
-                        </Link>
-                        <br />
-                      </span>
-                    ))}
-                  </div>
-                </div>
-                <div className="font-work text-xs text-brand-black">
-                  <span>Terdakwa:</span>
-                  <div>
-                    {terdakwa.map((val, i) => (
-                      <span key={i}>
-                        <Link
-                          href="#"
-                          className="text-brand-blue-100 hover:text-brand-blue-100/80"
-                        >
-                          {i + 1}. {val}
-                        </Link>
-                        <br />
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              </>
-            )}
-            {!penggugat && !tergugat && !penuntut_umum && (
+            {
               <>
                 <div className="font-work text-xs text-brand-black">
                   <span>Penggugat:</span>
                   <br />
-                  <span className="font-medium">Disamarkan</span>
+                  <span className="font-medium">{plaintiff.name}</span>
                 </div>
                 <div className="font-work text-xs text-brand-black">
                   <span>Tergugat:</span>
                   <br />
-                  <span className="font-medium">Disamarkan</span>
+                  <span className="font-medium">{defendant.name}</span>
                 </div>
               </>
-            )}
+            }
           </div>
         );
       },
@@ -201,6 +85,7 @@ export default function TableTrial() {
       key: "status",
       width: 117,
       align: "left",
+      render: () => "Sidang pertama",
     },
     {
       title: () => <TableHead title="Lama Proses" noWrapTitle />,
@@ -208,7 +93,7 @@ export default function TableTrial() {
       key: "on_going_proccess",
       width: 117,
       align: "left",
-      render: (val) => `${val} Hari`,
+      render: (_, rec) => `${daysToToday(rec.start_date)} Hari`,
     },
     {
       title: () => <TableHead title="Lokasi Pengadilan" noWrapTitle />,
@@ -216,6 +101,7 @@ export default function TableTrial() {
       key: "location",
       width: 146,
       align: "left",
+      render: (_, rec) => rec.location.name,
     },
   ];
 
@@ -226,12 +112,12 @@ export default function TableTrial() {
           Pengadilan Sidang Berjalan
         </h1>
         <div className="w-full rounded-md bg-white py-1">
-          <Table<Trial>
+          <Table<Case>
             pagination={{
-              total: 3000,
+              total: dataCase.data.meta.pagination.total,
               showTotal: (total, range) =>
                 `${range[0]}-${range[1]} of ${total} items`,
-              defaultPageSize: 5,
+              defaultPageSize: dataCase.data.meta.pagination.pageSize,
               defaultCurrent: 1,
               locale: { items_per_page: "" },
               position: ["bottomCenter"],
@@ -239,10 +125,11 @@ export default function TableTrial() {
             }}
             bordered={false}
             className="m-4 font-work"
-            dataSource={data}
+            dataSource={dataCase.data.data}
             columns={columns}
             rowKey={"id"}
             key={"id"}
+            loading={isLoading}
           />
         </div>
       </section>
