@@ -1,6 +1,10 @@
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { Link, useSearch } from "@tanstack/react-router";
 import { Avatar, Breadcrumb } from "antd";
 import CalendarSvgIcon from "../../assets/icons/calendar";
-import { Link } from "@tanstack/react-router";
+import fetchInterceptor from "../../config/axios";
+import { Lawyer } from "../../type/lawyer";
+import { formatDate } from "../../utils/date";
 import { cn } from "../../utils/tw";
 
 const breadcrumbItems = [
@@ -15,6 +19,13 @@ const breadcrumbItems = [
 ];
 
 function TopSectionLawyer() {
+  const searchParams = useSearch({ from: "/_layout/lawyer/$tab" });
+  const { data } = useSuspenseQuery({
+    queryKey: ["GET_LAWYERS", searchParams.id],
+    queryFn: async () =>
+      await fetchInterceptor<Lawyer>(`/lawyers/${searchParams.id}`),
+  });
+
   return (
     <div className="flex h-full w-full justify-center bg-white px-[50px]">
       <div className="w-full max-w-brand-lg space-y-3 pt-11">
@@ -25,18 +36,20 @@ function TopSectionLawyer() {
         />
         <div className="flex items-center gap-3">
           <Avatar size={64} />
-          <h2 className="heading-24">
-            Fritz Paris Junior Hutapea, S.H., LL. B.
-          </h2>
+          <h2 className="heading-24">{data.data.data.name}</h2>
         </div>
         <div className="flex gap-1">
           <CalendarSvgIcon />
           <span className="paragraph-14 text-brand-grey-100">
-            Data terbaru dari 10/10/2020 - 10/10/2024
+            Update terbaru {formatDate(data.data.data.updatedAt)}
           </span>
         </div>
         <div className="paragraph-14 flex gap-6 pt-8">
-          <Link to="/lawyer/$tab" params={{ tab: "analysis" }}>
+          <Link
+            to="/lawyer/$tab"
+            params={{ tab: "analysis" }}
+            search={{ id: searchParams.id }}
+          >
             {({ isActive }) => (
               <div
                 className={cn(
@@ -49,7 +62,11 @@ function TopSectionLawyer() {
               </div>
             )}
           </Link>
-          <Link to="/lawyer/$tab" params={{ tab: "case-list" }}>
+          <Link
+            to="/lawyer/$tab"
+            params={{ tab: "case-list" }}
+            search={{ id: searchParams.id }}
+          >
             {({ isActive }) => (
               <div
                 className={cn(
@@ -62,7 +79,11 @@ function TopSectionLawyer() {
               </div>
             )}
           </Link>
-          <Link to="/lawyer/$tab" params={{ tab: "custom-analysis" }}>
+          <Link
+            to="/lawyer/$tab"
+            params={{ tab: "custom-analysis" }}
+            search={{ id: searchParams.id }}
+          >
             {({ isActive }) => (
               <div
                 className={cn(

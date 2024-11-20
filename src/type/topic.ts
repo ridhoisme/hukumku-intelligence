@@ -18,6 +18,8 @@ export type Topics = {
 export type TopicsCases = {
   data: (Topic & {
     cases: (Case & { topic: Topic; location: Location })[];
+    top_topic?: string;
+    top_location?: string;
   })[];
   meta: ResultMeta;
 };

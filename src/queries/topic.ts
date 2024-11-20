@@ -17,3 +17,12 @@ export const searchTopic = <T>(params?: string) => {
       await fetchInterceptor<T>(`/search-topic?search=${params}`),
   });
 };
+
+export const filterTopic = <T>(params?: QueryParams) => {
+  const queryString = params ? qs(params) : "";
+  return queryOptions({
+    queryKey: ["SEARCH_TOPIC", params],
+    queryFn: async () =>
+      await fetchInterceptor<T>(`/filter-topic${queryString}`),
+  });
+};

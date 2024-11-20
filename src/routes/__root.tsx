@@ -10,6 +10,9 @@ import NotFound from "../screen/not-found";
 
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
   {
+    pendingComponent: () => (
+      <div className="h-screen w-screen bg-yellow-700">pending</div>
+    ),
     notFoundComponent: NotFound,
     component: () => (
       <>

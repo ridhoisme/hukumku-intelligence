@@ -20,6 +20,8 @@ export type Judges = {
 export type JudgesCases = {
   data: (Judge & {
     cases: (Case & { topic: Topic; location: Location })[];
+    top_topic?: string;
+    top_location?: string;
   })[];
   meta: ResultMeta;
 };

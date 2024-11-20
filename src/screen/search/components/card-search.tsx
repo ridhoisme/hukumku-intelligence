@@ -1,10 +1,10 @@
-import { Link, useNavigate } from "@tanstack/react-router";
+import { InfoCircleOutlined } from "@ant-design/icons";
+import { Link } from "@tanstack/react-router";
 import { Avatar, Tooltip } from "antd";
 import { useMemo } from "react";
 import { Label, Pie, PieChart } from "recharts";
 import CalendarSvgIcon from "../../../assets/icons/calendar";
 import { ChartConfig, ChartContainer } from "../../../components/ui/chart";
-import { InfoCircleOutlined } from "@ant-design/icons";
 import { formatDate } from "../../../utils/date";
 
 type CardSearchProps = {
@@ -48,8 +48,6 @@ export default function CardSearch({
   partially = 0,
   updatedAt,
 }: CardSearchProps) {
-  const navigate = useNavigate();
-
   const chartData = useMemo(() => {
     return [
       {
@@ -67,12 +65,7 @@ export default function CardSearch({
   }, [chartData]);
 
   return (
-    <div
-      onClick={() =>
-        navigate({ to: "/lawyer/$tab", params: { tab: "analysis" } })
-      }
-      className="flex h-full w-full flex-col rounded-[10px] border border-black/10 bg-white"
-    >
+    <div className="flex h-full w-full cursor-pointer flex-col rounded-[10px] border border-black/10 bg-white">
       <div className="h-full w-full flex-1 space-y-3 p-4">
         <div className="flex items-center gap-4">
           {showAvatar && (

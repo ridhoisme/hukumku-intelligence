@@ -1,15 +1,15 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { Link, useSearch } from "@tanstack/react-router";
+import { useSearch } from "@tanstack/react-router";
 import { Pagination } from "antd";
-import { filterLawyer } from "../../../queries/lawyer";
-import { LawyersCases } from "../../../type/lawyer";
+import { filterGeneral } from "../../../queries/general";
+import { GeneralsCases } from "../../../type/general";
 import CardSearch from "../components/card-search";
 import EmptyData from "../components/empty-data";
 
-export default function FilterLawyer() {
+export default function FilterGeneral() {
   const searchParams = useSearch({ from: "/_layout/_search/search" });
   const { data } = useSuspenseQuery(
-    filterLawyer<LawyersCases>({
+    filterGeneral<GeneralsCases>({
       search: searchParams.about ?? "",
       location: searchParams.location ?? "",
       topics: searchParams.topic ?? "",
@@ -46,23 +46,16 @@ export default function FilterLawyer() {
           ).length;
 
           return (
-            <Link
-              to="/lawyer/$tab"
-              params={{ tab: "analysis" }}
-              search={{ id: val.documentId }}
-              className="hover:text-inherit"
-            >
-              <CardSearch
-                key={val.documentId}
-                location={val.top_location}
-                title={val.name}
-                updatedAt={val.updatedAt}
-                topic={val.top_topic}
-                rejected={rejected}
-                granted={granted}
-                partially={partially}
-              />
-            </Link>
+            <CardSearch
+              key={val.documentId}
+              location={val.top_location}
+              title={val.name}
+              updatedAt={val.updatedAt}
+              topic={val.top_topic}
+              rejected={rejected}
+              granted={granted}
+              partially={partially}
+            />
           );
         })}
       </div>

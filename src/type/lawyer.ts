@@ -3,7 +3,7 @@ import { Location } from "./location";
 import { Topic } from "./topic";
 import { ResultMeta } from "./type";
 
-export type Lawyer = {
+export type LawyerProps = {
   id: number;
   documentId: string;
   name: string;
@@ -14,15 +14,51 @@ export type Lawyer = {
   publishedAt: string;
 };
 
+export type Lawyer = {
+  data: LawyerProps;
+  meta: ResultMeta;
+};
+
 export type Lawyers = {
-  data: Lawyer[];
+  data: LawyerProps[];
+  meta: ResultMeta;
+};
+
+export type LawyerCases = {
+  data: LawyerProps & {
+    plaintiff_cases: (Case & {
+      topic?: Topic;
+      location?: Location;
+      defendant_lawyer: LawyerProps;
+    })[];
+    defendant_cases: (Case & {
+      topic?: Topic;
+      location?: Location;
+      plaintiff_lawyer: LawyerProps;
+    })[];
+  };
   meta: ResultMeta;
 };
 
 export type LawyersCases = {
-  data: (Lawyer & {
+  data: (LawyerProps & {
     plaintiff_cases: (Case & { topic: Topic; location: Location })[];
     defendant_cases: (Case & { topic: Topic; location: Location })[];
+    top_topic?: string;
+    top_location?: string;
   })[];
   meta: ResultMeta;
+};
+
+export type LawyerAnalysis = {
+  data: {
+    top_topic: string;
+    top_location: string;
+    top_judge: string;
+    top_lawyer_enemy: string;
+    total_case: number;
+    case_rejected: number;
+    case_partialy: number;
+    case_granted: number;
+  };
 };

@@ -17,3 +17,12 @@ export const searchGeneral = <T>(params?: string) => {
       await fetchInterceptor<T>(`/search-general?search=${params}`),
   });
 };
+
+export const filterGeneral = <T>(params?: QueryParams) => {
+  const queryString = params ? qs(params) : "";
+  return queryOptions({
+    queryKey: ["SEARCH_GENERAL", params],
+    queryFn: async () =>
+      await fetchInterceptor<T>(`/filter-general${queryString}`),
+  });
+};

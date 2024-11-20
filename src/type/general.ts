@@ -21,6 +21,8 @@ export type GeneralsCases = {
   data: (General & {
     plaintiff_cases: (Case & { topic: Topic; location: Location })[];
     defendant_cases: (Case & { topic: Topic; location: Location })[];
+    top_topic?: string;
+    top_location?: string;
   })[];
   meta: ResultMeta;
 };

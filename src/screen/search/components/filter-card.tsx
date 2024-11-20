@@ -6,14 +6,10 @@ import { useState } from "react";
 import { useSuspenseQueries } from "@tanstack/react-query";
 import { getLocations } from "../../../queries/location";
 import { Locations } from "../../../type/location";
+import { getTopics } from "../../../queries/topic";
+import { Topics } from "../../../type/topic";
 
 const routeApi = getRouteApi("/_layout/_search/search");
-
-const options = [
-  { label: "Perceraian", value: "Perceraian" },
-  { label: "Harta Gono Gini", value: "Harta Gono Gini" },
-  { label: "Pembunuhan", value: "Pembunuhan" },
-];
 
 export default function FilterCard() {
   const search = routeApi.useSearch();
@@ -24,8 +20,14 @@ export default function FilterCard() {
   ) => `${value}%`;
 
   const result = useSuspenseQueries({
-    queries: [getLocations<Locations>({ fields: ["name"] })],
-    combine: (res) => ({ location: res[0].data.data }),
+    queries: [
+      getLocations<Locations>({ fields: ["name"] }),
+      getTopics<Topics>({ fields: ["name"] }),
+    ],
+    combine: (res) => ({
+      location: res[0].data.data.data,
+      topics: res[1].data.data.data,
+    }),
   });
 
   return (
@@ -91,9 +93,9 @@ export default function FilterCard() {
             navigate({ to: "/search", search: { ...search, topic: val } })
           }
         >
-          {options.map((val, i) => (
-            <Checkbox key={i} value={val.value}>
-              {val.label}
+          {result.topics.map((val) => (
+            <Checkbox key={val.id} value={val.name}>
+              {val.name}
             </Checkbox>
           ))}
         </Checkbox.Group>
@@ -117,7 +119,7 @@ export default function FilterCard() {
         </div>
         <Select
           onChange={(val) => navigate({ search: { ...search, location: val } })}
-          options={result.location.data.map((val) => ({
+          options={result.location.map((val) => ({
             label: val.name,
             value: val.name,
           }))}
@@ -152,6 +154,7 @@ export default function FilterCard() {
           onChangeComplete={(val) =>
             navigate({ to: "/search", search: { ...search, index: val } })
           }
+          disabled
           onChange={(val) => setIndex(val)}
         />
       </div>

@@ -17,3 +17,12 @@ export const searchJudge = <T>(params?: string) => {
       await fetchInterceptor<T>(`/search-judge?search=${params}`),
   });
 };
+
+export const filterJudge = <T>(params?: QueryParams) => {
+  const queryString = params ? qs(params) : "";
+  return queryOptions({
+    queryKey: ["SEARCH_JUDGE", params],
+    queryFn: async () =>
+      await fetchInterceptor<T>(`/filter-judge${queryString}`),
+  });
+};

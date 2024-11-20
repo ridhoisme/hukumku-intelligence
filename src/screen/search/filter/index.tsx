@@ -4,6 +4,10 @@ import EmptyData from "../components/empty-data";
 import FilterCard from "../components/filter-card";
 import SearchInput from "../components/search-input";
 import FilterLawyer from "./filter-lawyer";
+import FilterJudge from "./filter-judge";
+import FilterGeneral from "./filter-general";
+import FilterTopic from "./filter-topic";
+import FilterLocation from "./filter-location";
 
 export default function Filter() {
   const searchParams = useSearch({ from: "/_layout/_search/search" });
@@ -13,13 +17,13 @@ export default function Filter() {
       case "Advokat":
         return <FilterLawyer />;
       case "Hakim":
-        return <div>test</div>;
+        return <FilterJudge />;
       case "Lokasi":
-        return <div>test</div>;
+        return <FilterLocation />;
       case "Topik":
-        return <div>test</div>;
+        return <FilterTopic />;
       case "Umum":
-        return <div>test</div>;
+        return <FilterGeneral />;
       default:
         <EmptyData />;
     }

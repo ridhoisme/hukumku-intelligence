@@ -17,3 +17,12 @@ export const searchLawyer = <T>(params?: string) => {
       await fetchInterceptor<T>(`/search-lawyer?search=${params}`),
   });
 };
+
+export const filterLawyer = <T>(params?: QueryParams) => {
+  const queryString = params ? qs(params) : "";
+  return queryOptions({
+    queryKey: ["SEARCH_LAWYERS", params],
+    queryFn: async () =>
+      await fetchInterceptor<T>(`/filter-lawyer${queryString}`),
+  });
+};

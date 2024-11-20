@@ -22,7 +22,7 @@ import { Judges } from "../../type/judge";
 const { Search } = Input;
 
 export default function TopSection() {
-  const navigate = useNavigate({ from: "/" });
+  const navigate = useNavigate();
   const result = useSuspenseQueries({
     queries: [
       getLocations<Locations>({ fields: "name" }),

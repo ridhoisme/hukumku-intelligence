@@ -1,52 +1,101 @@
-import { Link } from "@tanstack/react-router";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { Link, useSearch } from "@tanstack/react-router";
 import { Table, TableColumnsType } from "antd";
 import TableHead from "../../../../components/table/table-head";
 import { Card } from "../../../../components/ui/card";
+import fetchInterceptor from "../../../../config/axios";
 import useColumnSearch from "../../../../hooks/useColumnSearch";
-
-type Lawyer = {
-  id: string;
-  name: string;
-  full_granted: number;
-  partially_granted: number;
-  rejected: number;
-  total_case: number;
-};
+import { LawyerCases } from "../../../../type/lawyer";
+import { transformDataLawyer } from "../../../../utils/array";
+import { qs } from "../../../../utils/qs";
 
 export default function TableListLawyer() {
-  const data: Lawyer[] = [
-    {
-      id: "1",
-      full_granted: 50,
-      rejected: 50,
-      partially_granted: 200,
-      total_case: 300,
-      name: "Fritz Paris Junior Hutapea, S.H., LL. B.",
-    },
-    {
-      id: "2",
-      full_granted: 500,
-      rejected: 100,
-      partially_granted: 100,
-      total_case: 700,
-      name: "Leo George",
-    },
-  ];
+  const searchParams = useSearch({ from: "/_layout/lawyer/$tab" });
 
-  const columns: TableColumnsType<Lawyer> = [
+  const queryString = qs({
+    populate: {
+      defendant_cases: {
+        fields: ["title", "info"],
+        populate: {
+          plaintiff_lawyer: {
+            fields: ["name"],
+          },
+        },
+      },
+      plaintiff_cases: {
+        fields: ["title", "info"],
+        populate: {
+          defendant_lawyer: {
+            fields: ["name"],
+          },
+        },
+      },
+    },
+  });
+
+  const { data } = useSuspenseQuery({
+    queryKey: ["GET_LAWYERS", searchParams.id, queryString],
+    queryFn: async () =>
+      await fetchInterceptor<LawyerCases>(
+        `/lawyers/${searchParams.id}${queryString}`,
+      ),
+  });
+
+  const plaintiff_cases = data.data.data.plaintiff_cases;
+  const defendant_cases = data.data.data.defendant_cases;
+
+  const plaintiff_lawer = plaintiff_cases.map((c) => {
+    return {
+      name: c.defendant_lawyer.name,
+      info: c.info,
+      id: c.defendant_lawyer.documentId,
+    };
+  });
+
+  const defendant_lawer = defendant_cases.map((c) => {
+    switch (c.info) {
+      case "Dikabulkan Total":
+        return {
+          name: c.plaintiff_lawyer.name,
+          id: c.plaintiff_lawyer.documentId,
+          info: "Ditolak",
+        };
+      case "Ditolak":
+        return {
+          name: c.plaintiff_lawyer.name,
+          id: c.plaintiff_lawyer.documentId,
+          info: "Dikabulkan Total",
+        };
+      default:
+        return {
+          name: c.plaintiff_lawyer.name,
+          id: c.plaintiff_lawyer.documentId,
+          info: c.info,
+        };
+    }
+  });
+
+  const transformed = transformDataLawyer([
+    ...plaintiff_lawer,
+    ...defendant_lawer,
+  ]);
+
+  const columns: TableColumnsType = [
     {
       title: () => <TableHead title=" Nama Advokat" />,
-      dataIndex: "name",
-      key: "name",
+      dataIndex: "lawyer_name",
+      key: "lawyer_name",
       width: 287,
       filterSearch: true,
       filterMode: "menu",
       ellipsis: true,
       onFilter: (value, record) => record.name.startsWith(value as string),
-      render: (val) => (
+      render: (val, rec) => (
         <Link
           className="font-work text-sm font-medium text-brand-blue-100"
-          href="#"
+          to="/lawyer/$tab"
+          params={{ tab: "analysis" }}
+          search={{ id: rec.id }}
         >
           {val}
         </Link>
@@ -55,11 +104,11 @@ export default function TableListLawyer() {
     },
     {
       title: () => <TableHead title="Dikabulkan Total" bgDot="bg-granted" />,
-      dataIndex: "full_granted",
-      key: "full_granted",
+      dataIndex: "granted",
+      key: "granted",
       showSorterTooltip: false,
-      sorter: (a, b) => a.full_granted - b.full_granted,
-      render: (val, rec) => `${((val / rec.total_case) * 100).toFixed()}%`,
+      sorter: (a, b) => a.granted - b.granted,
+      render: (val, rec) => `${((val / rec.total_cases) * 100).toFixed()}%`,
       width: 161,
       align: "center",
     },
@@ -69,7 +118,7 @@ export default function TableListLawyer() {
       key: "rejected",
       showSorterTooltip: false,
       sorter: (a, b) => a.rejected - b.rejected,
-      render: (val, rec) => `${((val / rec.total_case) * 100).toFixed()}%`,
+      render: (val, rec) => `${((val / rec.total_cases) * 100).toFixed()}%`,
       width: 161,
       align: "center",
     },
@@ -77,20 +126,20 @@ export default function TableListLawyer() {
       title: () => (
         <TableHead title="Dikabulkan Sebagian" bgDot="bg-partially" />
       ),
-      dataIndex: "partially_granted",
-      key: "partially_granted",
+      dataIndex: "partially",
+      key: "partially",
       showSorterTooltip: false,
-      sorter: (a, b) => a.partially_granted - b.partially_granted,
-      render: (val, rec) => `${((val / rec.total_case) * 100).toFixed()}%`,
+      sorter: (a, b) => a.partially - b.partially,
+      render: (val, rec) => `${((val / rec.total_cases) * 100).toFixed()}%`,
       width: 161,
       align: "center",
     },
     {
       title: () => <TableHead title="Total Kasus" noWrapTitle />,
-      dataIndex: "total_case",
-      key: "total_case",
+      dataIndex: "total_cases",
+      key: "total_cases",
       showSorterTooltip: false,
-      sorter: (a, b) => a.partially_granted - b.partially_granted,
+      sorter: (a, b) => a.total_cases - b.total_cases,
       width: 161,
       align: "center",
     },
@@ -104,19 +153,19 @@ export default function TableListLawyer() {
           <div
             className={`h-full bg-granted`}
             style={{
-              width: `${((rec.full_granted / rec.total_case) * 100).toFixed()}%`,
+              width: `${((rec.granted / rec.total_cases) * 100).toFixed()}%`,
             }}
           />
           <div
             className={`h-full bg-rejected`}
             style={{
-              width: `${((rec.rejected / rec.total_case) * 100).toFixed()}%`,
+              width: `${((rec.rejected / rec.total_cases) * 100).toFixed()}%`,
             }}
           />
           <div
             className={`h-full bg-partially`}
             style={{
-              width: `${((rec.partially_granted / rec.total_case) * 100).toFixed()}%`,
+              width: `${((rec.partially / rec.total_cases) * 100).toFixed()}%`,
             }}
           />
         </div>
@@ -126,10 +175,10 @@ export default function TableListLawyer() {
 
   return (
     <Card className="" title="Daftar Advokat">
-      <Table<Lawyer>
+      <Table
         rowKey={"id"}
         pagination={{
-          total: 3000,
+          total: transformed.length,
           showTotal: (total, range) =>
             `${range[0]}-${range[1]} of ${total} items`,
           defaultPageSize: 5,
@@ -139,7 +188,7 @@ export default function TableListLawyer() {
           pageSizeOptions: [5, 10, 20, 40, 100],
         }}
         className="m-4 font-work"
-        dataSource={data}
+        dataSource={transformed}
         columns={columns}
       />
     </Card>

@@ -17,3 +17,12 @@ export const searchLocation = <T>(params?: string) => {
       await fetchInterceptor<T>(`/search-location?search=${params}`),
   });
 };
+
+export const filterLocation = <T>(params?: QueryParams) => {
+  const queryString = params ? qs(params) : "";
+  return queryOptions({
+    queryKey: ["SEARCH_LOCATION", params],
+    queryFn: async () =>
+      await fetchInterceptor<T>(`/filter-location${queryString}`),
+  });
+};
