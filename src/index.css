@@ -11,10 +11,12 @@
     --chart-3: 207, 100%, 58%;
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
+    --chart-empty: 0 0% 97%;
 
     --color-granted: hsl(var(--chart-1));
     --color-rejected: hsl(var(--chart-2));
     --color-partially: hsl(var(--chart-3));
+    --color-empty: hsl(var(--chart-empty));
   }
 
   .dark {

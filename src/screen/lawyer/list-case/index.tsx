@@ -1,205 +1,32 @@
-import { Pagination, Table, TableColumnsType } from "antd";
-import TableHead from "../../../components/table/table-head";
-import useColumnSearch from "../../../hooks/useColumnSearch";
 import { DownOutlined, UpOutlined } from "@ant-design/icons";
-import { Link } from "@tanstack/react-router";
-import { cn } from "../../../utils/tw";
-
-type Case = {
-  id: string;
-  title: string;
-  client_name: string;
-  topic: string;
-  role: string;
-  lawyer_enemy: string;
-  info: string;
-  index_point: number;
-  location: string;
-  judge: string;
-};
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { useSearch } from "@tanstack/react-router";
+import { Pagination, Table } from "antd";
+import fetchInterceptor from "../../../config/axios";
+import { LawyerListCase } from "../../../type/lawyer";
+import { formatDate } from "../../../utils/date";
+import LawyerListCaseColumns from "./columns";
 
 export default function ListCase() {
-  const data: Case[] = [
-    {
-      id: "1",
-      client_name: "Leo Herwitz",
-      title:
-        "Lorem ipsum dolor sit amet consectetur. Natoque ornare amet metus mi volutpat id. Viverra diam.",
-      topic: "Perceraian",
-      role: "Penggugat",
-      lawyer_enemy: "Jaylon Mango",
-      info: "Dikabulkan sebagian",
-      index_point: 90,
-      location: "Pengadilan Negeri Jakarta Pusat",
-      judge: "Nama Hakim",
-    },
-    {
-      id: "2",
-      client_name: "Leo Herwitz",
-      title:
-        "Lorem ipsum dolor sit amet consectetur. Natoque ornare amet metus mi volutpat id. Viverra diam.",
-      topic: "Perceraian",
-      role: "Penggugat",
-      lawyer_enemy: "Jaylon Mango",
-      info: "Dikabulkan total",
-      index_point: 50,
-      location: "Pengadilan Negeri Jakarta Pusat",
-      judge: "Nama Hakim",
-    },
-    {
-      id: "3",
-      client_name: "Leo Herwitz",
-      title:
-        "Lorem ipsum dolor sit amet consectetur. Natoque ornare amet metus mi volutpat id. Viverra diam.",
-      topic: "Perceraian",
-      role: "Penggugat",
-      lawyer_enemy: "Jaylon Mango",
-      info: "Ditolak",
-      index_point: 30,
-      location: "Pengadilan Negeri Jakarta Pusat",
-      judge: "Nama Hakim",
-    },
-  ];
+  const searchParams = useSearch({ from: "/_layout/lawyer/$tab" });
 
-  const columns: TableColumnsType<Case> = [
-    {
-      title: () => <TableHead title="Judul" />,
-      dataIndex: "title",
-      key: "title",
-      align: "left",
-      render: (val) => (
-        <Link
-          className="line-clamp-2 font-work text-sm font-medium text-brand-blue-100"
-          href="#"
-        >
-          {val}
-        </Link>
+  const { data, isLoading } = useSuspenseQuery({
+    queryKey: ["GET_LAWYER-LIST-CASE", searchParams.id],
+    queryFn: async () =>
+      await fetchInterceptor<LawyerListCase>(
+        `/lawyer-list-case/${searchParams.id}`,
       ),
-    },
-    {
-      title: () => <TableHead title="Nama Klien" noWrapTitle />,
-      dataIndex: "client_name",
-      key: "client_name",
-      align: "left",
-      filterSearch: true,
-      onFilter: (value, record) =>
-        record.client_name.startsWith(value as string),
-      ...useColumnSearch({ dataIndex: "client_name", href: "#" }),
-    },
-    {
-      title: () => <TableHead title="Topik" noWrapTitle />,
-      dataIndex: "topic",
-      key: "topic",
-      align: "left",
-      filterSearch: true,
-      onFilter: (value, record) => record.topic.startsWith(value as string),
-      filters: [
-        {
-          text: "London",
-          value: "London",
-        },
-        {
-          text: "New York",
-          value: "New York",
-        },
-      ],
-    },
-    {
-      title: () => <TableHead title="Role" noWrapTitle />,
-      dataIndex: "role",
-      key: "role",
-      align: "left",
-      onFilter: (value, record) => record.role.startsWith(value as string),
-      filters: [
-        {
-          text: "London",
-          value: "London",
-        },
-        {
-          text: "New York",
-          value: "New York",
-        },
-      ],
-    },
-    {
-      title: () => <TableHead title="Lawyer Lawan" noWrapTitle />,
-      dataIndex: "lawyer_enemy",
-      key: "lawyer_enemy",
-      align: "left",
-      filterSearch: true,
-      width: 200,
-      onFilter: (value, record) =>
-        record.lawyer_enemy.startsWith(value as string),
-      ...useColumnSearch({ dataIndex: "lawyer_enemy", href: "#" }),
-    },
-    {
-      title: () => <TableHead title="Keterangan" noWrapTitle />,
-      dataIndex: "info",
-      key: "info",
-      align: "left",
-      onFilter: (value, record) => record.info.startsWith(value as string),
-      filters: [
-        {
-          text: "London",
-          value: "London",
-        },
-        {
-          text: "New York",
-          value: "New York",
-        },
-      ],
-      render: (val) => {
-        const bg = String(val).toLowerCase().includes("sebagian")
-          ? "bg-partially"
-          : String(val).toLowerCase().includes("total")
-            ? "bg-granted"
-            : "bg-rejected";
-
-        return (
-          <div className="flex items-center gap-1">
-            <div className={cn("aspect-square size-[10px] rounded-full", bg)} />
-            <span className="w-min text-left leading-5">{val}</span>
-          </div>
-        );
-      },
-    },
-    {
-      title: () => <TableHead title="Index Point" noWrapTitle />,
-      dataIndex: "index_point",
-      key: "index_point",
-      showSorterTooltip: false,
-      sorter: (a, b) => a.index_point - b.index_point,
-      render: (val) => `${val}%`,
-      align: "left",
-    },
-    {
-      title: () => <TableHead title="Lokasi" noWrapTitle />,
-      dataIndex: "location",
-      key: "location",
-      align: "left",
-      filterSearch: true,
-      onFilter: (value, record) => record.location.startsWith(value as string),
-      ...useColumnSearch({ dataIndex: "location" }),
-    },
-    {
-      title: () => <TableHead title="Hakim" noWrapTitle />,
-      dataIndex: "judge",
-      key: "judge",
-      align: "left",
-      filterSearch: true,
-      onFilter: (value, record) => record.judge.startsWith(value as string),
-      ...useColumnSearch({ dataIndex: "judge", href: "#" }),
-    },
-  ];
+  });
 
   return (
     <div className="flex h-full w-full flex-col items-center justify-center gap-6 px-[50px] py-16">
       <div className="w-full max-w-brand-lg space-y-6">
         <div className="bg-white p-4">
-          <Table<Case>
-            columns={columns}
+          <Table
+            columns={LawyerListCaseColumns()}
             rowKey={"id"}
-            dataSource={data}
+            loading={isLoading}
+            dataSource={data.data.data}
             expandable={{
               expandIcon: ({ expanded, onExpand, record }) =>
                 expanded ? (
@@ -207,7 +34,7 @@ export default function ListCase() {
                 ) : (
                   <DownOutlined onClick={(e) => onExpand(record, e)} />
                 ),
-              expandedRowRender: () => (
+              expandedRowRender: (c) => (
                 <div className="grid grid-cols-3 pl-12">
                   <div className="space-y-4">
                     <div className="text flex flex-col font-work">
@@ -215,7 +42,7 @@ export default function ListCase() {
                         Nomor Kasus
                       </span>
                       <span className="text-base font-medium text-brand-black">
-                        N0001
+                        {c.case_number}
                       </span>
                     </div>
                     <div className="text flex flex-col font-work">
@@ -223,7 +50,7 @@ export default function ListCase() {
                         Jenis Hukuman
                       </span>
                       <span className="text-base font-medium text-brand-black">
-                        Pidana
+                        {c.type_punishment}
                       </span>
                     </div>
                   </div>
@@ -233,7 +60,7 @@ export default function ListCase() {
                         Tanggal Mulai
                       </span>
                       <span className="text-base font-medium text-brand-black">
-                        10/10/2024
+                        {formatDate(c.start_date)}
                       </span>
                     </div>
                     <div className="text flex flex-col font-work">
@@ -241,7 +68,9 @@ export default function ListCase() {
                         Putusan Awal
                       </span>
                       <span className="text-base font-medium text-brand-black">
-                        20 Tahun Penjara
+                        {c.initial_claim.split("\n").map((line, index) => (
+                          <p key={index}>{line}</p>
+                        ))}
                       </span>
                     </div>
                   </div>
@@ -251,7 +80,7 @@ export default function ListCase() {
                         Tanggal Selesai
                       </span>
                       <span className="text-base font-medium text-brand-black">
-                        10/10/2024
+                        {formatDate(c.finish_date)}
                       </span>
                     </div>
                     <div className="text flex flex-col font-work">
@@ -259,7 +88,9 @@ export default function ListCase() {
                         Putusan Akhir
                       </span>
                       <span className="text-base font-medium text-brand-black">
-                        20 Tahun Penjara
+                        {c.final_verdict.split("\n").map((line, index) => (
+                          <p key={index}>{line}</p>
+                        ))}
                       </span>
                     </div>
                   </div>
@@ -270,7 +101,7 @@ export default function ListCase() {
           />
         </div>
         <Pagination
-          total={600}
+          total={data.data.data.length}
           showTotal={(total, range) =>
             `${range[0]}-${range[1]} of ${total} items`
           }

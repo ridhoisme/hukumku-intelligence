@@ -1,9 +1,9 @@
 import { Case } from "./case";
-import { Location } from "./location";
-import { Topic } from "./topic";
+import { LocationProps } from "./location";
+import { TopicProps } from "./topic";
 import { ResultMeta } from "./type";
 
-export type Judge = {
+export type JudgeProps = {
   id: number;
   documentId: string;
   name: string;
@@ -13,13 +13,13 @@ export type Judge = {
 };
 
 export type Judges = {
-  data: Judge[];
+  data: JudgeProps[];
   meta: ResultMeta;
 };
 
 export type JudgesCases = {
-  data: (Judge & {
-    cases: (Case & { topic: Topic; location: Location })[];
+  data: (JudgeProps & {
+    cases: (Case & { topic: TopicProps; location: LocationProps })[];
     top_topic?: string;
     top_location?: string;
   })[];

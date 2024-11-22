@@ -1,8 +1,8 @@
-import { General } from "./general";
-import { Judge } from "./judge";
-import { Lawyer } from "./lawyer";
-import { Location } from "./location";
-import { Topic } from "./topic";
+import { GeneralProps } from "./general";
+import { JudgeProps } from "./judge";
+import { LawyerProps } from "./lawyer";
+import { LocationProps } from "./location";
+import { TopicProps } from "./topic";
 import { ResultMeta } from "./type";
 
 export type Case = {
@@ -15,19 +15,19 @@ export type Case = {
   start_date: string;
   finish_date: string;
   final_verdict: string;
-  preliminary_ruling: string;
+  initial_claim: string;
   type_punishment: string;
   createdAt: string;
   updatedAt: string;
   publishedAt: string;
   is_done: boolean | null;
-  topic: Topic;
-  defendant_lawyer: Lawyer;
-  plaintiff_lawyer: Lawyer;
-  judge: Judge;
-  plaintiff: General;
-  defendant: General;
-  location: Location;
+  topic: TopicProps;
+  defendant_lawyer: LawyerProps;
+  plaintiff_lawyer: LawyerProps;
+  judge: JudgeProps;
+  plaintiff: GeneralProps;
+  defendant: GeneralProps;
+  location: LocationProps;
 };
 
 export type Cases = {

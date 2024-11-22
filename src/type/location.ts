@@ -1,8 +1,8 @@
 import { Case } from "./case";
-import { Topic } from "./topic";
+import { TopicProps } from "./topic";
 import { ResultMeta } from "./type";
 
-export type Location = {
+export type LocationProps = {
   id: number;
   documentId: string;
   name: string;
@@ -12,13 +12,13 @@ export type Location = {
 };
 
 export type Locations = {
-  data: Location[];
+  data: LocationProps[];
   meta: ResultMeta;
 };
 
 export type LocationsCases = {
-  data: (Location & {
-    cases: (Case & { topic: Topic; location: Location })[];
+  data: (LocationProps & {
+    cases: (Case & { topic: TopicProps; location: LocationProps })[];
     top_topic?: string;
     top_location?: string;
   })[];

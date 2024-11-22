@@ -26,6 +26,9 @@ importers:
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
+      markdown-to-jsx:
+        specifier: ^7.7.0
+        version: 7.7.0(react@18.3.1)
       qs:
         specifier: ^6.13.0
         version: 6.13.0
@@ -1565,6 +1568,12 @@ packages:
 
   lru-cache@5.1.1:
     resolution: {integrity: sha512-KpNARQA3Iwv+jTA0utUVVbrh+Jlrr1Fv0e56GGzAFOXN7dk/FviaDW8LHmK52DlcH4WP2n6gI8vN1aesBFgo9w==}
+
+  markdown-to-jsx@7.7.0:
+    resolution: {integrity: sha512-130nIMbJY+woOQJ11xTqEtYko60t6EpNkZuqjKMferL3udtob3nRfzXOdsiA26NPemiR7w/hR8M3/B9yiYPGZg==}
+    engines: {node: '>= 10'}
+    peerDependencies:
+      react: '>= 0.14.0'
 
   memoize-one@4.0.3:
     resolution: {integrity: sha512-QmpUu4KqDmX0plH4u+tf0riMc1KHE1+lw95cMrLlXQAFOx/xnBtwhZ52XJxd9X2O6kwKBqX32kmhbhlobD0cuw==}
@@ -3790,6 +3799,10 @@ snapshots:
   lru-cache@5.1.1:
     dependencies:
       yallist: 3.1.1
+
+  markdown-to-jsx@7.7.0(react@18.3.1):
+    dependencies:
+      react: 18.3.1
 
   memoize-one@4.0.3: {}
 

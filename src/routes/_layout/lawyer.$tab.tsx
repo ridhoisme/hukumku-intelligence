@@ -3,6 +3,7 @@ import TopSectionLawyer from "../../screen/lawyer/top-section";
 import Analysis from "../../screen/lawyer/analysis";
 import ListCase from "../../screen/lawyer/list-case";
 import { z } from "zod";
+import CustomAnalysis from "../../screen/lawyer/custom-analysis";
 
 const searchSchema = z.object({
   id: z.string(),
@@ -21,7 +22,7 @@ function RouteComponent() {
       <TopSectionLawyer />
       {tab === "analysis" && <Analysis />}
       {tab === "case-list" && <ListCase />}
-      {tab === "custom-analysis" && <Analysis />}
+      {tab === "custom-analysis" && <CustomAnalysis />}
     </div>
   );
 }

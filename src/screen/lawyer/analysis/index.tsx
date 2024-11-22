@@ -1,16 +1,16 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
+import { useSearch } from "@tanstack/react-router";
+import fetchInterceptor from "../../../config/axios";
+import { LawyerAnalysis } from "../../../type/lawyer";
 import CardDecision from "./components/card-decision";
 import CardIndexPoint from "./components/card-index-point";
 import CardTopCategory from "./components/card-top-category";
 import CardTotalCase from "./components/card-total-case";
-import TableListClient from "./components/table-list-client";
-import TableListJudge from "./components/table-list-judge";
-import TableListLawyer from "./components/table-list-lawyer";
-import TableListLocation from "./components/table-list-location";
-import TableListTopic from "./components/table-list-topic";
-import { useSearch } from "@tanstack/react-router";
-import fetchInterceptor from "../../../config/axios";
-import { LawyerAnalysis } from "../../../type/lawyer";
+import TableListClient from "./components/table-general";
+import TableListJudge from "./components/table-judge";
+import TableListLawyer from "./components/table-lawyer";
+import TableListLocation from "./components/table-location";
+import TableListTopic from "./components/table-topic";
 
 export default function Analysis() {
   const searchParams = useSearch({ from: "/_layout/lawyer/$tab" });

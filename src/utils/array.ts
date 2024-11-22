@@ -23,7 +23,7 @@ type DataItem = {
 };
 
 export type TransformedData = {
-  lawyer_name: string;
+  name: string;
   granted: number;
   partially: number;
   rejected: number;
@@ -31,7 +31,7 @@ export type TransformedData = {
   id: string;
 };
 
-export const transformDataLawyer = (data: DataItem[]): TransformedData[] => {
+export const transformData = (data: DataItem[]): TransformedData[] => {
   const categories = [
     "Dikabulkan Total",
     "Dikabulkan Sebagian",
@@ -39,7 +39,7 @@ export const transformDataLawyer = (data: DataItem[]): TransformedData[] => {
   ] as const;
   const keyMapping: Record<
     (typeof categories)[number],
-    keyof Omit<TransformedData, "lawyer_name" | "id">
+    keyof Omit<TransformedData, "name" | "id">
   > = {
     "Dikabulkan Total": "granted",
     "Dikabulkan Sebagian": "partially",
@@ -57,10 +57,10 @@ export const transformDataLawyer = (data: DataItem[]): TransformedData[] => {
     return acc;
   }, {});
 
-  return Object.entries(groupedData).map(([lawyer_name, { counts, id }]) => {
+  return Object.entries(groupedData).map(([name, { counts, id }]) => {
     const transformedEntry: TransformedData = {
       id,
-      lawyer_name,
+      name,
       granted: 0,
       partially: 0,
       rejected: 0,

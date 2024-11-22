@@ -1,9 +1,9 @@
 import { Case } from "./case";
-import { Location } from "./location";
-import { Topic } from "./topic";
+import { LocationProps } from "./location";
+import { TopicProps } from "./topic";
 import { ResultMeta } from "./type";
 
-export type General = {
+export type GeneralProps = {
   id: number;
   documentId: string;
   name: string;
@@ -13,14 +13,14 @@ export type General = {
 };
 
 export type Generals = {
-  data: General[];
+  data: GeneralProps[];
   meta: ResultMeta;
 };
 
 export type GeneralsCases = {
-  data: (General & {
-    plaintiff_cases: (Case & { topic: Topic; location: Location })[];
-    defendant_cases: (Case & { topic: Topic; location: Location })[];
+  data: (GeneralProps & {
+    plaintiff_cases: (Case & { topic: TopicProps; location: LocationProps })[];
+    defendant_cases: (Case & { topic: TopicProps; location: LocationProps })[];
     top_topic?: string;
     top_location?: string;
   })[];
