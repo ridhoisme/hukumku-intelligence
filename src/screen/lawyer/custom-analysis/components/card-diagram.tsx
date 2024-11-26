@@ -1,3 +1,5 @@
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { useSearch } from "@tanstack/react-router";
 import { useMemo } from "react";
 import { Label, Pie, PieChart } from "recharts";
 import { Card } from "../../../../components/ui/card";
@@ -7,6 +9,8 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "../../../../components/ui/chart";
+import fetchInterceptor from "../../../../config/axios";
+import { Lawyer } from "../../../../type/lawyer";
 
 type CardDiagram = {
   rejected: number;
@@ -38,6 +42,14 @@ export default function CardDiagram({
     },
   } satisfies ChartConfig;
 
+  const searchParams = useSearch({ from: "/_layout/lawyer/$tab" });
+
+  const { data } = useSuspenseQuery({
+    queryKey: ["GET_LAWYER", searchParams.id],
+    queryFn: async () =>
+      await fetchInterceptor<Lawyer>(`/lawyers/${searchParams.id}`),
+  });
+
   const chartData = useMemo(() => {
     const data = [
       { key: "rejected", data: rejected, fill: "var(--color-rejected)" },
@@ -46,8 +58,6 @@ export default function CardDiagram({
     ];
 
     const total = data.reduce((acc, curr) => acc + curr.data, 0);
-
-    // Add a fallback segment if total is 0
     return total === 0
       ? [{ key: "empty", data: 1, fill: "var(--color-empty)" }]
       : data;
@@ -59,7 +69,7 @@ export default function CardDiagram({
   }, [chartData]);
 
   return (
-    <Card title="Putusan" className="h-full max-h-[290px] w-full">
+    <Card title={data.data.data.name} className="h-full max-h-[290px] w-full">
       <div className="flex h-full items-center justify-start">
         <div className="aspect-square h-full w-auto">
           <ChartContainer

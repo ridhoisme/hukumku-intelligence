@@ -8,17 +8,17 @@ import {
   ChartTooltipContent,
 } from "../../../../components/ui/chart";
 
-const chartData = [
-  {
-    key: "rejected",
-    data: 14,
-    fill: "var(--color-rejected)",
-  },
-  { key: "granted", data: 15, fill: "var(--color-granted)" },
-  { key: "partially", data: 30, fill: "var(--color-partially)" },
-];
+type CardDecision = {
+  rejected: number;
+  granted: number;
+  partially: number;
+};
 
-export default function CardDecision() {
+export default function CardDecision({
+  granted,
+  partially,
+  rejected,
+}: CardDecision) {
   const chartConfig = {
     granted: {
       label: "Dikabulkan Total",
@@ -34,13 +34,25 @@ export default function CardDecision() {
     },
   } satisfies ChartConfig;
 
+  const chartData = useMemo(() => {
+    return [
+      {
+        key: "rejected",
+        data: rejected,
+        fill: "var(--color-rejected)",
+      },
+      { key: "granted", data: granted, fill: "var(--color-granted)" },
+      { key: "partially", data: partially, fill: "var(--color-partially)" },
+    ];
+  }, [granted, partially, rejected]);
+
   const totalValue = useMemo(() => {
     return chartData.reduce((acc, curr) => acc + curr.data, 0);
-  }, []);
+  }, [chartData]);
 
   return (
     <Card title="Putusan" className="h-full w-full">
-      <div className="flex h-full w-full items-center justify-start">
+      <div className="flex h-full w-10/12 items-center justify-center">
         <ChartContainer
           config={chartConfig}
           className="aspect-square max-h-[220px] flex-1"

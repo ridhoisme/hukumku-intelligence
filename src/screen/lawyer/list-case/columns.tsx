@@ -344,7 +344,7 @@ export default function LawyerListCaseColumns() {
           className="line-clamp-3 font-work text-sm font-medium text-brand-blue-100"
           to="/judge/$tab"
           params={{ tab: "analysis" }}
-          search={{ id: rec.documentId }}
+          search={{ id: rec.judge_documentId }}
         >
           {val}
         </Link>

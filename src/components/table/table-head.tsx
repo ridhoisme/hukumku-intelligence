@@ -1,12 +1,14 @@
 import { Tooltip } from "antd";
 import { cn } from "../../utils/tw";
 import { InfoCircleOutlined } from "@ant-design/icons";
+import { ClassNameValue } from "tailwind-merge";
 
 type TableHeadProps = {
   title: string;
   bgDot?: "bg-granted" | "bg-rejected" | "bg-partially";
   showTooltip?: boolean;
   noWrapTitle?: boolean;
+  className?: ClassNameValue;
 };
 
 export default function TableHead({
@@ -14,9 +16,15 @@ export default function TableHead({
   title,
   showTooltip = false,
   noWrapTitle = false,
+  className = "",
 }: TableHeadProps) {
   return (
-    <div className="flex items-center gap-1 font-work text-base font-bold text-brand-black">
+    <div
+      className={cn(
+        "flex items-center gap-1 font-work text-base font-bold text-brand-black",
+        className,
+      )}
+    >
       {bgDot && (
         <div className={cn("aspect-square size-[10px] rounded-full", bgDot)} />
       )}

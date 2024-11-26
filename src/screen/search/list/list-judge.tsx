@@ -27,16 +27,23 @@ export default function ListJudge({ data }: ListJudge) {
           ).length;
 
           return (
-            <CardSearch
-              key={val.documentId}
-              location={getMostFrequentValue(locations) ?? ""}
-              updatedAt={val.updatedAt}
-              title={val.name}
-              topic={getMostFrequentValue(topics) ?? ""}
-              rejected={rejected}
-              granted={granted}
-              partially={partially}
-            />
+            <Link
+              to="/judge/$tab"
+              params={{ tab: "analysis" }}
+              search={{ id: val.documentId }}
+              className="hover:text-inherit"
+            >
+              <CardSearch
+                key={val.documentId}
+                location={getMostFrequentValue(locations) ?? ""}
+                updatedAt={val.updatedAt}
+                title={val.name}
+                topic={getMostFrequentValue(topics) ?? ""}
+                rejected={rejected}
+                granted={granted}
+                partially={partially}
+              />
+            </Link>
           );
         })}
       </div>

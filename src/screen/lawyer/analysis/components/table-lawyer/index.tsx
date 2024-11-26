@@ -33,7 +33,7 @@ export default function TableListLawyer() {
   });
 
   const { data } = useSuspenseQuery({
-    queryKey: ["GET_LAWYERS", searchParams.id, queryString],
+    queryKey: ["GET_LAWYER_LAWYERS", searchParams.id, queryString],
     queryFn: async () =>
       await fetchInterceptor<LawyerCases>(
         `/lawyers/${searchParams.id}${queryString}`,
@@ -77,7 +77,7 @@ export default function TableListLawyer() {
   const transformed = transformData([...plaintiff_lawer, ...defendant_lawer]);
 
   return (
-    <Card className="" title="Daftar Advokat">
+    <Card title="Daftar Advokat">
       <Table
         rowKey={"id"}
         pagination={{

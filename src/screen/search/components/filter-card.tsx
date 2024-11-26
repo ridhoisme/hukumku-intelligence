@@ -8,6 +8,7 @@ import { getLocations } from "../../../queries/location";
 import { Locations } from "../../../type/location";
 import { getTopics } from "../../../queries/topic";
 import { Topics } from "../../../type/topic";
+import SearchTopic from "./seach-topic";
 
 const routeApi = getRouteApi("/_layout/_search/search");
 
@@ -29,6 +30,33 @@ export default function FilterCard() {
       topics: res[1].data.data.data,
     }),
   });
+
+  const handleTopicChange = (
+    newValues: string[],
+    isFromSearchTopic: boolean,
+  ) => {
+    const baseTopics =
+      search.topic?.filter((topic) =>
+        result.topics.slice(0, 3).some((t) => t.name === topic),
+      ) || [];
+
+    const additionalTopics =
+      search.topic?.filter((topic) =>
+        result.topics.slice(3).some((t) => t.name === topic),
+      ) || [];
+
+    const updatedTopics = isFromSearchTopic
+      ? baseTopics.concat(newValues)
+      : newValues.concat(additionalTopics);
+
+    navigate({
+      to: "/search",
+      search: {
+        ...search,
+        topic: updatedTopics.length ? updatedTopics : undefined,
+      },
+    });
+  };
 
   return (
     <div className="flex h-fit w-[326px] flex-col rounded-[10px] bg-white p-4">
@@ -89,16 +117,21 @@ export default function FilterCard() {
         <Checkbox.Group
           className="flex flex-col gap-2"
           value={search.topic}
-          onChange={(val) =>
-            navigate({ to: "/search", search: { ...search, topic: val } })
-          }
+          onChange={(val) => handleTopicChange(val, false)}
         >
-          {result.topics.map((val) => (
+          {result.topics.slice(0, 3).map((val) => (
             <Checkbox key={val.id} value={val.name}>
               {val.name}
             </Checkbox>
           ))}
         </Checkbox.Group>
+        <div className="cursor-pointer">
+          <SearchTopic
+            topics={result.topics.slice(3)}
+            topicValue={search.topic}
+            onChange={(val) => handleTopicChange(val, true)}
+          />
+        </div>
       </div>
       <div className="space-y-3 border-b py-5">
         <div className="flex items-center justify-between">

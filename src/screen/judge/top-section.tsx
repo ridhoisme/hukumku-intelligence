@@ -1,12 +1,17 @@
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { Link, useSearch } from "@tanstack/react-router";
 import { Avatar, Breadcrumb } from "antd";
 import CalendarSvgIcon from "../../assets/icons/calendar";
-import { Link } from "@tanstack/react-router";
+import fetchInterceptor from "../../config/axios";
+import { Judge } from "../../type/judge";
 import { cn } from "../../utils/tw";
+import { formatDate } from "../../utils/date";
 
 const breadcrumbItems = [
   {
     title: "Beranda",
     className: "cursor-pointer",
+    href: "/",
   },
   {
     title: "Hakim",
@@ -15,6 +20,13 @@ const breadcrumbItems = [
 ];
 
 function TopSectionJudge() {
+  const searchParams = useSearch({ from: "/_layout/judge/$tab" });
+  const { data } = useSuspenseQuery({
+    queryKey: ["GET_JUDGE", searchParams.id],
+    queryFn: async () =>
+      await fetchInterceptor<Judge>(`/judges/${searchParams.id}`),
+  });
+
   return (
     <div className="flex h-full w-full justify-center bg-white px-[50px]">
       <div className="w-full max-w-brand-lg space-y-3 pt-11">
@@ -25,16 +37,20 @@ function TopSectionJudge() {
         />
         <div className="flex items-center gap-3">
           <Avatar size={64} />
-          <h2 className="heading-24">Nama Hakim</h2>
+          <h2 className="heading-24">{data.data.data.name}</h2>
         </div>
         <div className="flex gap-1">
           <CalendarSvgIcon />
           <span className="paragraph-14 text-brand-grey-100">
-            Data terbaru dari 10/10/2020 - 10/10/2024
+            Update terbaru {formatDate(data.data.data.updatedAt)}
           </span>
         </div>
         <div className="paragraph-14 flex gap-6 pt-8">
-          <Link to="/judge/$tab" params={{ tab: "analysis" }}>
+          <Link
+            to="/judge/$tab"
+            params={{ tab: "analysis" }}
+            search={{ id: searchParams.id }}
+          >
             {({ isActive }) => (
               <div
                 className={cn(
@@ -47,7 +63,11 @@ function TopSectionJudge() {
               </div>
             )}
           </Link>
-          <Link to="/judge/$tab" params={{ tab: "case-list" }}>
+          <Link
+            to="/judge/$tab"
+            params={{ tab: "case-list" }}
+            search={{ id: searchParams.id }}
+          >
             {({ isActive }) => (
               <div
                 className={cn(
@@ -60,7 +80,11 @@ function TopSectionJudge() {
               </div>
             )}
           </Link>
-          <Link to="/judge/$tab" params={{ tab: "custom-analysis" }}>
+          <Link
+            to="/judge/$tab"
+            params={{ tab: "custom-analysis" }}
+            search={{ id: searchParams.id }}
+          >
             {({ isActive }) => (
               <div
                 className={cn(

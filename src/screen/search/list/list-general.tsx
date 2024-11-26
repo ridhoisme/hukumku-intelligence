@@ -36,16 +36,23 @@ export default function ListGeneral({ data }: ListGeneral) {
             (val) => val.info === "Dikabulkan Sebagian",
           ).length;
           return (
-            <CardSearch
-              key={val.documentId}
-              location={getMostFrequentValue(locations) ?? ""}
-              updatedAt={val.updatedAt}
-              title={val.name}
-              rejected={rejected}
-              partially={partially}
-              granted={granted}
-              topic={getMostFrequentValue(topics) ?? ""}
-            />
+            <Link
+              to="/general/$tab"
+              params={{ tab: "analysis" }}
+              search={{ id: val.documentId }}
+              className="hover:text-inherit"
+            >
+              <CardSearch
+                key={val.documentId}
+                location={getMostFrequentValue(locations) ?? ""}
+                updatedAt={val.updatedAt}
+                title={val.name}
+                rejected={rejected}
+                partially={partially}
+                granted={granted}
+                topic={getMostFrequentValue(topics) ?? ""}
+              />
+            </Link>
           );
         })}
       </div>

@@ -1,20 +1,35 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { useSearch } from "@tanstack/react-router";
+import { Link, useSearch } from "@tanstack/react-router";
 import { Pagination } from "antd";
 import { filterGeneral } from "../../../queries/general";
 import { GeneralsCases } from "../../../type/general";
 import CardSearch from "../components/card-search";
 import EmptyData from "../components/empty-data";
+import { useMemo, useState } from "react";
 
 export default function FilterGeneral() {
   const searchParams = useSearch({ from: "/_layout/_search/search" });
-  const { data } = useSuspenseQuery(
-    filterGeneral<GeneralsCases>({
+  const [page, setPage] = useState(1);
+  const queryString = useMemo(() => {
+    return {
       search: searchParams.about ?? "",
       location: searchParams.location ?? "",
       topics: searchParams.topic ?? "",
-    }),
+      pagination: {
+        pageSize: 9,
+        page,
+      },
+    };
+  }, [page, searchParams.about, searchParams.location, searchParams.topic]);
+
+  const { data, refetch } = useSuspenseQuery(
+    filterGeneral<GeneralsCases>(queryString),
   );
+
+  const handleChangePage = (page: number) => {
+    setPage(page);
+    refetch();
+  };
 
   return data.data.meta.pagination.total === 0 ? (
     <EmptyData />
@@ -46,16 +61,23 @@ export default function FilterGeneral() {
           ).length;
 
           return (
-            <CardSearch
-              key={val.documentId}
-              location={val.top_location}
-              title={val.name}
-              updatedAt={val.updatedAt}
-              topic={val.top_topic}
-              rejected={rejected}
-              granted={granted}
-              partially={partially}
-            />
+            <Link
+              to="/general/$tab"
+              params={{ tab: "analysis" }}
+              search={{ id: val.documentId }}
+              className="hover:text-inherit"
+            >
+              <CardSearch
+                key={val.documentId}
+                location={val.top_location}
+                title={val.name}
+                updatedAt={val.updatedAt}
+                topic={val.top_topic}
+                rejected={rejected}
+                granted={granted}
+                partially={partially}
+              />
+            </Link>
           );
         })}
       </div>
@@ -65,6 +87,7 @@ export default function FilterGeneral() {
           align="center"
           defaultCurrent={1}
           total={data.data.meta.pagination.total}
+          onChange={handleChangePage}
         />
       )}
     </>

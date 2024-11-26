@@ -11,6 +11,7 @@ const breadcrumbItems = [
   {
     title: "Beranda",
     className: "cursor-pointer",
+    href: "/",
   },
   {
     title: "Advokat",

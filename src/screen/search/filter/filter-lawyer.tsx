@@ -1,6 +1,7 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { Link, useSearch } from "@tanstack/react-router";
 import { Pagination } from "antd";
+import { useMemo, useState } from "react";
 import { filterLawyer } from "../../../queries/lawyer";
 import { LawyersCases } from "../../../type/lawyer";
 import CardSearch from "../components/card-search";
@@ -8,13 +9,28 @@ import EmptyData from "../components/empty-data";
 
 export default function FilterLawyer() {
   const searchParams = useSearch({ from: "/_layout/_search/search" });
-  const { data } = useSuspenseQuery(
-    filterLawyer<LawyersCases>({
+  const [page, setPage] = useState(1);
+
+  const queryString = useMemo(() => {
+    return {
       search: searchParams.about ?? "",
       location: searchParams.location ?? "",
       topics: searchParams.topic ?? "",
-    }),
+      pagination: {
+        pageSize: 9,
+        page,
+      },
+    };
+  }, [page, searchParams.about, searchParams.location, searchParams.topic]);
+
+  const { data, refetch } = useSuspenseQuery(
+    filterLawyer<LawyersCases>(queryString),
   );
+
+  const handleChangePage = (page: number) => {
+    setPage(page);
+    refetch();
+  };
 
   return data.data.meta.pagination.total === 0 ? (
     <EmptyData />
@@ -70,8 +86,9 @@ export default function FilterLawyer() {
         <Pagination
           showSizeChanger={false}
           align="center"
-          defaultCurrent={1}
           total={data.data.meta.pagination.total}
+          pageSize={data.data.meta.pagination.pageSize}
+          onChange={handleChangePage}
         />
       )}
     </>

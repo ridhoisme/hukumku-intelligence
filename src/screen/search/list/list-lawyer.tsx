@@ -37,16 +37,23 @@ export default function ListLawyer({ data }: ListLawyer) {
           ).length;
 
           return (
-            <CardSearch
-              key={val.documentId}
-              location={getMostFrequentValue(locations) ?? ""}
-              title={val.name}
-              updatedAt={val.updatedAt}
-              topic={getMostFrequentValue(topics) ?? ""}
-              rejected={rejected}
-              granted={granted}
-              partially={partially}
-            />
+            <Link
+              to="/lawyer/$tab"
+              params={{ tab: "analysis" }}
+              search={{ id: val.documentId }}
+              className="hover:text-inherit"
+            >
+              <CardSearch
+                key={val.documentId}
+                location={getMostFrequentValue(locations) ?? ""}
+                title={val.name}
+                updatedAt={val.updatedAt}
+                topic={getMostFrequentValue(topics) ?? ""}
+                rejected={rejected}
+                granted={granted}
+                partially={partially}
+              />
+            </Link>
           );
         })}
       </div>

@@ -23,16 +23,23 @@ export default function ListLocation({ data }: ListLocation) {
             (val) => val.info === "Dikabulkan Sebagian",
           ).length;
           return (
-            <CardSearch
-              key={val.documentId}
-              showDetail={false}
-              showAvatar={false}
-              title={val.name}
-              updatedAt={val.updatedAt}
-              rejected={rejected}
-              partially={partially}
-              granted={granted}
-            />
+            <Link
+              to="/location/$tab"
+              params={{ tab: "analysis" }}
+              search={{ id: val.documentId }}
+              className="hover:text-inherit"
+            >
+              <CardSearch
+                key={val.documentId}
+                showDetail={false}
+                showAvatar={false}
+                title={val.name}
+                updatedAt={val.updatedAt}
+                rejected={rejected}
+                partially={partially}
+                granted={granted}
+              />
+            </Link>
           );
         })}
       </div>

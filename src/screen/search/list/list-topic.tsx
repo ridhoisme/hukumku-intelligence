@@ -23,17 +23,24 @@ export default function ListTopic({ data }: ListTopic) {
             (val) => val.info === "Dikabulkan Sebagian",
           ).length;
           return (
-            <CardSearch
-              key={val.documentId}
-              showDetail={false}
-              document={val.cases.length}
-              showAvatar={false}
-              updatedAt={val.updatedAt}
-              title={val.name}
-              rejected={rejected}
-              granted={granted}
-              partially={partially}
-            />
+            <Link
+              to="/topic/$tab"
+              params={{ tab: "analysis" }}
+              search={{ id: val.documentId }}
+              className="hover:text-inherit"
+            >
+              <CardSearch
+                key={val.documentId}
+                showDetail={false}
+                document={val.cases.length}
+                showAvatar={false}
+                updatedAt={val.updatedAt}
+                title={val.name}
+                rejected={rejected}
+                granted={granted}
+                partially={partially}
+              />
+            </Link>
           );
         })}
       </div>

@@ -15,6 +15,7 @@ import { Route as LayoutImport } from './routes/_layout'
 import { Route as IndexImport } from './routes/index'
 import { Route as LayoutSearchImport } from './routes/_layout/_search'
 import { Route as LayoutTopicTabImport } from './routes/_layout/topic.$tab'
+import { Route as LayoutLocationTabImport } from './routes/_layout/location.$tab'
 import { Route as LayoutLawyerTabImport } from './routes/_layout/lawyer.$tab'
 import { Route as LayoutJudgeTabImport } from './routes/_layout/judge.$tab'
 import { Route as LayoutGeneralTabImport } from './routes/_layout/general.$tab'
@@ -41,6 +42,12 @@ const LayoutSearchRoute = LayoutSearchImport.update({
 const LayoutTopicTabRoute = LayoutTopicTabImport.update({
   id: '/topic/$tab',
   path: '/topic/$tab',
+  getParentRoute: () => LayoutRoute,
+} as any)
+
+const LayoutLocationTabRoute = LayoutLocationTabImport.update({
+  id: '/location/$tab',
+  path: '/location/$tab',
   getParentRoute: () => LayoutRoute,
 } as any)
 
@@ -121,6 +128,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutLawyerTabImport
       parentRoute: typeof LayoutImport
     }
+    '/_layout/location/$tab': {
+      id: '/_layout/location/$tab'
+      path: '/location/$tab'
+      fullPath: '/location/$tab'
+      preLoaderRoute: typeof LayoutLocationTabImport
+      parentRoute: typeof LayoutImport
+    }
     '/_layout/topic/$tab': {
       id: '/_layout/topic/$tab'
       path: '/topic/$tab'
@@ -150,6 +164,7 @@ interface LayoutRouteChildren {
   LayoutGeneralTabRoute: typeof LayoutGeneralTabRoute
   LayoutJudgeTabRoute: typeof LayoutJudgeTabRoute
   LayoutLawyerTabRoute: typeof LayoutLawyerTabRoute
+  LayoutLocationTabRoute: typeof LayoutLocationTabRoute
   LayoutTopicTabRoute: typeof LayoutTopicTabRoute
 }
 
@@ -158,6 +173,7 @@ const LayoutRouteChildren: LayoutRouteChildren = {
   LayoutGeneralTabRoute: LayoutGeneralTabRoute,
   LayoutJudgeTabRoute: LayoutJudgeTabRoute,
   LayoutLawyerTabRoute: LayoutLawyerTabRoute,
+  LayoutLocationTabRoute: LayoutLocationTabRoute,
   LayoutTopicTabRoute: LayoutTopicTabRoute,
 }
 
@@ -171,6 +187,7 @@ export interface FileRoutesByFullPath {
   '/general/$tab': typeof LayoutGeneralTabRoute
   '/judge/$tab': typeof LayoutJudgeTabRoute
   '/lawyer/$tab': typeof LayoutLawyerTabRoute
+  '/location/$tab': typeof LayoutLocationTabRoute
   '/topic/$tab': typeof LayoutTopicTabRoute
 }
 
@@ -181,6 +198,7 @@ export interface FileRoutesByTo {
   '/general/$tab': typeof LayoutGeneralTabRoute
   '/judge/$tab': typeof LayoutJudgeTabRoute
   '/lawyer/$tab': typeof LayoutLawyerTabRoute
+  '/location/$tab': typeof LayoutLocationTabRoute
   '/topic/$tab': typeof LayoutTopicTabRoute
 }
 
@@ -193,6 +211,7 @@ export interface FileRoutesById {
   '/_layout/general/$tab': typeof LayoutGeneralTabRoute
   '/_layout/judge/$tab': typeof LayoutJudgeTabRoute
   '/_layout/lawyer/$tab': typeof LayoutLawyerTabRoute
+  '/_layout/location/$tab': typeof LayoutLocationTabRoute
   '/_layout/topic/$tab': typeof LayoutTopicTabRoute
 }
 
@@ -205,6 +224,7 @@ export interface FileRouteTypes {
     | '/general/$tab'
     | '/judge/$tab'
     | '/lawyer/$tab'
+    | '/location/$tab'
     | '/topic/$tab'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -214,6 +234,7 @@ export interface FileRouteTypes {
     | '/general/$tab'
     | '/judge/$tab'
     | '/lawyer/$tab'
+    | '/location/$tab'
     | '/topic/$tab'
   id:
     | '__root__'
@@ -224,6 +245,7 @@ export interface FileRouteTypes {
     | '/_layout/general/$tab'
     | '/_layout/judge/$tab'
     | '/_layout/lawyer/$tab'
+    | '/_layout/location/$tab'
     | '/_layout/topic/$tab'
   fileRoutesById: FileRoutesById
 }
@@ -262,6 +284,7 @@ export const routeTree = rootRoute
         "/_layout/general/$tab",
         "/_layout/judge/$tab",
         "/_layout/lawyer/$tab",
+        "/_layout/location/$tab",
         "/_layout/topic/$tab"
       ]
     },
@@ -286,6 +309,10 @@ export const routeTree = rootRoute
     },
     "/_layout/lawyer/$tab": {
       "filePath": "_layout/lawyer.$tab.tsx",
+      "parent": "/_layout"
+    },
+    "/_layout/location/$tab": {
+      "filePath": "_layout/location.$tab.tsx",
       "parent": "/_layout"
     },
     "/_layout/topic/$tab": {

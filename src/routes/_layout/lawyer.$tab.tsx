@@ -7,6 +7,10 @@ import CustomAnalysis from "../../screen/lawyer/custom-analysis";
 
 const searchSchema = z.object({
   id: z.string(),
+  location: z.string().optional(),
+  lawyer_enemy: z.string().optional(),
+  topic: z.string().optional(),
+  judge: z.string().optional(),
 });
 
 export const Route = createFileRoute("/_layout/lawyer/$tab")({

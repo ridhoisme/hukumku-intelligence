@@ -1,5 +1,5 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { useSearch } from "@tanstack/react-router";
+import { Link, useSearch } from "@tanstack/react-router";
 import { Pagination } from "antd";
 import { filterLocation } from "../../../queries/location";
 import { LocationsCases } from "../../../type/location";
@@ -36,16 +36,24 @@ export default function FilterLocation() {
           ).length;
 
           return (
-            <CardSearch
-              key={val.documentId}
-              location={val.top_location}
-              title={val.name}
-              updatedAt={val.updatedAt}
-              topic={val.top_topic}
-              rejected={rejected}
-              granted={granted}
-              partially={partially}
-            />
+            <Link
+              key={val.id}
+              to="/location/$tab"
+              params={{ tab: "analysis" }}
+              search={{ id: val.documentId }}
+              className="hover:text-inherit"
+            >
+              <CardSearch
+                key={val.documentId}
+                location={val.top_location}
+                title={val.name}
+                updatedAt={val.updatedAt}
+                topic={val.top_topic}
+                rejected={rejected}
+                granted={granted}
+                partially={partially}
+              />
+            </Link>
           );
         })}
       </div>

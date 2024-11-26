@@ -103,3 +103,43 @@ export type LawyerListCaseProps = {
 export type LawyerListCase = {
   data: LawyerListCaseProps[];
 };
+
+export type LawyerListCaseCustomProps = {
+  id: number;
+  documentId: string;
+  title: string;
+  case_number: string;
+  defendant: string;
+  defendant_id: number;
+  defendant_documentId: string;
+  plaintiff: string;
+  plaintiff_id: number;
+  plaintiff_documentId: string;
+  topic: string;
+  plaintiff_lawyer: string;
+  plaintiff_lawyer_id: number;
+  plaintiff_lawyer_documentId: string;
+  defendant_lawyer: string;
+  defendant_lawyer_id: number;
+  defendant_lawyer_documentId: string;
+  info: string;
+  location: string;
+  location_id: number;
+  location_documentId: string;
+  judge: string;
+  judge_id: number;
+  judge_documentId: string;
+  info_second: string;
+  start_date: string;
+  finish_date: string;
+  final_verdict: string;
+  type_punishment: string;
+  is_done: boolean;
+  duration: string;
+  register_date: string | null;
+  initial_claim: string;
+};
+
+export type LawyerListCaseCustom = {
+  data: LawyerListCaseCustomProps[];
+};

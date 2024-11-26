@@ -1,32 +1,47 @@
+import { useMemo } from "react";
 import Hammer from "../../../../assets/icons/hammer";
 import Location from "../../../../assets/icons/location";
 import Neraca from "../../../../assets/icons/neraca";
 import WorkBag from "../../../../assets/icons/work-bag";
 
-const categories = [
-  {
-    icon: <Neraca />,
-    title: "Advokat",
-    content: "Fritz Paris Junior Hutapea, S.H., LL. B.",
-  },
-  {
-    icon: <Hammer />,
-    title: "Hakim",
-    content: "Fritz Paris Junior Hutapea, S.H., LL. B.",
-  },
-  {
-    icon: <WorkBag />,
-    title: "Topik",
-    content: "Gono Gini",
-  },
-  {
-    icon: <Location />,
-    title: "Lokasi",
-    content: "Pengadilan Negeri Jakarta Pusat",
-  },
-];
+type CardTopCategory = {
+  lawyer: string;
+  topic: string;
+  location: string;
+  judge: string;
+};
 
-export default function CardTopCategory() {
+export default function CardTopCategory({
+  judge,
+  lawyer,
+  location,
+  topic,
+}: CardTopCategory) {
+  const categories = useMemo(() => {
+    return [
+      {
+        icon: <Neraca />,
+        title: "Advokat",
+        content: lawyer,
+      },
+      {
+        icon: <Hammer />,
+        title: "Hakim ",
+        content: judge,
+      },
+      {
+        icon: <WorkBag />,
+        title: "Topik",
+        content: topic,
+      },
+      {
+        icon: <Location />,
+        title: "Lokasi",
+        content: location,
+      },
+    ];
+  }, [judge, lawyer, location, topic]);
+
   return (
     <div className="flex h-full w-full flex-col gap-4 rounded-[10px] bg-white p-4 font-work">
       <div className="cursor-pointer text-sm font-medium text-brand-grey-200">
