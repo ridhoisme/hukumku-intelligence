@@ -5,8 +5,17 @@ import {
   Outlet,
   ScrollRestoration,
 } from "@tanstack/react-router";
-import { TanStackRouterDevtools } from "@tanstack/router-devtools";
 import NotFound from "../screen/not-found";
+import React from "react";
+
+const TanStackRouterDevtools =
+  import.meta.env.NODE_ENV === "production"
+    ? () => null
+    : React.lazy(() =>
+        import("@tanstack/router-devtools").then((res) => ({
+          default: res.TanStackRouterDevtools,
+        })),
+      );
 
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
   {

@@ -4,6 +4,7 @@ import TopSectionJudge from "../../screen/judge/top-section";
 import { z } from "zod";
 import ListCase from "../../screen/judge/list-case";
 import CustomAnalysis from "../../screen/judge/custom-analysis";
+import Loading from "../../screen/loading";
 
 const searchSchema = z.object({
   id: z.string(),
@@ -16,6 +17,8 @@ const searchSchema = z.object({
 export const Route = createFileRoute("/_layout/judge/$tab")({
   component: RouteComponent,
   validateSearch: (search) => searchSchema.parse(search),
+  wrapInSuspense: true,
+  pendingComponent: () => <Loading />,
 });
 
 function RouteComponent() {

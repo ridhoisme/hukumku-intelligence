@@ -4,6 +4,7 @@ import Analysis from "../../screen/lawyer/analysis";
 import ListCase from "../../screen/lawyer/list-case";
 import { z } from "zod";
 import CustomAnalysis from "../../screen/lawyer/custom-analysis";
+import Loading from "../../screen/loading";
 
 const searchSchema = z.object({
   id: z.string(),
@@ -16,6 +17,8 @@ const searchSchema = z.object({
 export const Route = createFileRoute("/_layout/lawyer/$tab")({
   component: RouteComponent,
   validateSearch: (search) => searchSchema.parse(search),
+  wrapInSuspense: true,
+  pendingComponent: () => <Loading />,
 });
 
 function RouteComponent() {

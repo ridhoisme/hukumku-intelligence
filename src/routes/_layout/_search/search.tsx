@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { z } from "zod";
 import SearchScreen from "../../../screen/search";
 import { TOPIC } from "../../../consts";
+import Loading from "../../../screen/loading";
 
 const searchSchema = z.object({
   about: z.string().optional(),
@@ -15,4 +16,6 @@ const searchSchema = z.object({
 export const Route = createFileRoute("/_layout/_search/search")({
   validateSearch: (search) => searchSchema.parse(search),
   component: SearchScreen,
+  wrapInSuspense: true,
+  pendingComponent: () => <Loading />,
 });

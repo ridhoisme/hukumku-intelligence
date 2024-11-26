@@ -3,6 +3,7 @@ import { z } from "zod";
 import TopSectionLocation from "../../screen/location/top-section";
 import Analysis from "../../screen/location/analysis";
 import ListCase from "../../screen/location/list-case";
+import Loading from "../../screen/loading";
 
 const searchSchema = z.object({
   id: z.string(),
@@ -15,6 +16,8 @@ const searchSchema = z.object({
 export const Route = createFileRoute("/_layout/location/$tab")({
   component: RouteComponent,
   validateSearch: (search) => searchSchema.parse(search),
+  wrapInSuspense: true,
+  pendingComponent: () => <Loading />,
 });
 
 function RouteComponent() {

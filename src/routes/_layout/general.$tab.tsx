@@ -4,6 +4,7 @@ import Analysis from "../../screen/general/analysis";
 import { z } from "zod";
 import ListCase from "../../screen/general/list-case";
 import CustomAnalysis from "../../screen/general/custom-analysis";
+import Loading from "../../screen/loading";
 
 const searchSchema = z.object({
   id: z.string(),
@@ -16,6 +17,8 @@ const searchSchema = z.object({
 export const Route = createFileRoute("/_layout/general/$tab")({
   component: RouteComponent,
   validateSearch: (search) => searchSchema.parse(search),
+  wrapInSuspense: true,
+  pendingComponent: () => <Loading />,
 });
 
 function RouteComponent() {
