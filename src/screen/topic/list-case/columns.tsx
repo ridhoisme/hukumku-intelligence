@@ -1,26 +1,15 @@
 import { SearchOutlined } from "@ant-design/icons";
-import { useSuspenseQueries } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
 import { InputRef, TableColumnsType } from "antd";
 import { useRef, useState } from "react";
 import { renderFilterDropdown } from "../../../components/table/dropdown-filter";
 import TableHead from "../../../components/table/table-head";
-import { getLocations } from "../../../queries/location";
-import { getTopics } from "../../../queries/topic";
-import { Locations } from "../../../type/location";
-import { TopicListCaseProps, Topics } from "../../../type/topic";
+import { TopicListCaseProps } from "../../../type/topic";
 import { cn } from "../../../utils/tw";
 
 export default function TopicListCaseColumns() {
   const [searchText, setSearchText] = useState<string>("");
   const searchInput = useRef<InputRef>(null);
-  const result = useSuspenseQueries({
-    queries: [getTopics<Topics>(), getLocations<Locations>()],
-    combine: (res) => ({
-      topic: res[0].data.data.data,
-      location: res[1].data.data.data,
-    }),
-  });
 
   const handleSearch = (selectedKeys: string[], confirm: () => void) => {
     confirm();
