@@ -7,7 +7,7 @@ export default function Loading({
   logoLarge?: boolean;
 }) {
   return (
-    <div className="flex h-screen w-screen items-center justify-center">
+    <div className="fixed inset-0 flex items-center justify-center bg-white">
       {logoLarge ? (
         <img src={Logo} alt="logo" className="h-12" />
       ) : (
