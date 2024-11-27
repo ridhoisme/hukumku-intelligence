@@ -39,6 +39,7 @@ export default function LawyerListCaseColumns() {
       dataIndex: "title",
       key: "title",
       align: "left",
+      fixed: "left",
       filterDropdown: ({
         setSelectedKeys,
         selectedKeys,
@@ -74,15 +75,15 @@ export default function LawyerListCaseColumns() {
           setTimeout(() => searchInput.current?.select(), 100);
         }
       },
-      render: (val, rec) => (
-        <Link
+      render: (val) => (
+        <div
           className="line-clamp-3 font-work text-sm font-medium text-brand-blue-100"
-          to="/lawyer/$tab"
-          params={{ tab: "analysis" }}
-          search={{ id: rec.documentId }}
+          // to="/lawyer/$tab"
+          // params={{ tab: "analysis" }}
+          // search={{ id: rec.documentId }}
         >
           {val}
-        </Link>
+        </div>
       ),
     },
     {
@@ -130,7 +131,7 @@ export default function LawyerListCaseColumns() {
           className="line-clamp-3 font-work text-sm font-medium text-brand-blue-100"
           to="/general/$tab"
           params={{ tab: "analysis" }}
-          search={{ id: rec.documentId }}
+          search={{ id: rec.client_documentId }}
         >
           {val}
         </Link>
@@ -209,7 +210,7 @@ export default function LawyerListCaseColumns() {
           className="line-clamp-3 font-work text-sm font-medium text-brand-blue-100"
           to="/lawyer/$tab"
           params={{ tab: "analysis" }}
-          search={{ id: rec.documentId }}
+          search={{ id: rec.lawyer_enemy_documentId }}
         >
           {val}
         </Link>

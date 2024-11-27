@@ -74,7 +74,7 @@ export default function CardDiagram({
         <div className="aspect-square h-full w-auto">
           <ChartContainer
             config={chartConfig}
-            className="h-6/6 !aspect-square w-auto"
+            className="!aspect-square h-[200px] w-auto"
           >
             <PieChart>
               <ChartTooltip
@@ -123,7 +123,7 @@ export default function CardDiagram({
                 dataKey="data"
                 nameKey="key"
                 innerRadius={45}
-                strokeWidth={5}
+                strokeWidth={50}
               >
                 <Label
                   content={({ viewBox }) => {

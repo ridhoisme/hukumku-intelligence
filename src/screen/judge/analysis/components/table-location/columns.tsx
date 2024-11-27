@@ -90,7 +90,7 @@ export default function TableLocationColumns() {
       render: (val, rec) => (
         <Link
           className="font-work text-sm font-medium text-brand-blue-100"
-          to="/judge/$tab"
+          to="/location/$tab"
           params={{ tab: "analysis" }}
           search={{ id: rec.id }}
         >

@@ -3,9 +3,10 @@ import { cn } from "../../../utils/tw";
 
 type EmptyData = {
   bordered?: boolean;
+  desc?: string;
 };
 
-export default function EmptyData({ bordered = true }: EmptyData) {
+export default function EmptyData({ bordered = true, desc }: EmptyData) {
   return (
     <div
       className={cn(
@@ -19,8 +20,7 @@ export default function EmptyData({ bordered = true }: EmptyData) {
           Data tidak ditemukan
         </h1>
         <p className="w-[375px] text-center font-work text-sm text-brand-black">
-          Lorem ipsum dolor sit amet consectetur. At dictum condimentum turpis
-          aliquam purus vestibulum tellus
+          {desc}
         </p>
       </div>
     </div>

@@ -1,5 +1,4 @@
 import { InfoCircleOutlined } from "@ant-design/icons";
-import { Link } from "@tanstack/react-router";
 import { Avatar, Tooltip } from "antd";
 import { useMemo } from "react";
 import { Label, Pie, PieChart } from "recharts";
@@ -73,9 +72,9 @@ export default function CardSearch({
               <Avatar size={50} className="aspect-square" />
             </div>
           )}
-          <Link className="line-clamp-2 font-work font-semibold text-brand-blue-100 hover:text-brand-blue-100/75">
+          <h1 className="line-clamp-2 font-work font-semibold text-brand-blue-100 hover:text-brand-blue-100/75">
             {title}
-          </Link>
+          </h1>
         </div>
         <div className="space-y-3">
           {showDetail && (

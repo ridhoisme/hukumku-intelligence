@@ -6,7 +6,6 @@ import fetchInterceptor from "../../../../config/axios";
 
 type FormProps = {
   lawyer: string;
-  judge: string;
   topic: string;
   location: string;
 };
@@ -23,10 +22,9 @@ export default function FilterCard() {
       await fetchInterceptor<General>(`/generals/${searchParams.id}`),
   });
 
-  const handleFinish = ({ judge, lawyer, location, topic }: FormProps) => {
+  const handleFinish = ({ lawyer, location, topic }: FormProps) => {
     const searchObj: Record<string, string | undefined> = {};
 
-    if (judge) searchObj.judge = judge;
     if (lawyer) searchObj.lawyer = lawyer;
     if (location) searchObj.location = location;
     if (topic) searchObj.topic = topic;
@@ -57,26 +55,14 @@ export default function FilterCard() {
           <Form.Item
             label={
               <span className="font-work text-base font-semibold text-brand-black">
-                Advokat Lawan
+                Advokat Dihadapi
               </span>
             }
             name="lawyer"
             className="mb-2 border-t pt-3"
             initialValue={searchParams.lawyer ?? ""}
           >
-            <Input placeholder="Cari advokat lawan" className="h-10" />
-          </Form.Item>
-          <Form.Item
-            label={
-              <span className="font-work text-base font-semibold text-brand-black">
-                Hakim Dihadapi
-              </span>
-            }
-            name="judge"
-            className="mb-2 border-t pt-3"
-            initialValue={searchParams.judge ?? ""}
-          >
-            <Input placeholder="Cari hakim yang dihadapi" className="h-10" />
+            <Input placeholder="Cari advokat yang di hadapi" className="h-10" />
           </Form.Item>
           <Form.Item
             label={
