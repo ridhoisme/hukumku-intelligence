@@ -63,13 +63,13 @@ export default function FilterLawyer() {
 
           return (
             <Link
+              key={val.documentId}
               to="/lawyer/$tab"
               params={{ tab: "analysis" }}
               search={{ id: val.documentId }}
               className="hover:text-inherit"
             >
               <CardSearch
-                key={val.documentId}
                 location={val.top_location}
                 title={val.name}
                 updatedAt={val.updatedAt}

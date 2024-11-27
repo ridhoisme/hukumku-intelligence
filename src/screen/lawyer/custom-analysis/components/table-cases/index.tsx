@@ -11,7 +11,7 @@ type TableCases = {
 
 export default function TableCases({ data }: TableCases) {
   return (
-    <Card title="Daftar Klien">
+    <Card title="Detail Kasus">
       <Table
         rowKey={"id"}
         pagination={{
@@ -23,6 +23,7 @@ export default function TableCases({ data }: TableCases) {
           locale: { items_per_page: "" },
           position: ["bottomCenter"],
           pageSizeOptions: [5, 10, 20, 40, 100],
+          showSizeChanger: true,
         }}
         className="m-4 font-work"
         dataSource={data.data}

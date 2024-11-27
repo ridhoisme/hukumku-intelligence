@@ -56,9 +56,9 @@ export default function FilterTopic() {
               params={{ tab: "analysis" }}
               search={{ id: val.documentId }}
               className="hover:text-inherit"
+              key={val.documentId}
             >
               <CardSearch
-                key={val.documentId}
                 location={val.top_location}
                 title={val.name}
                 updatedAt={val.updatedAt}

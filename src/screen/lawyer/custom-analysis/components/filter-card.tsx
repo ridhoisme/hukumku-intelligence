@@ -48,7 +48,7 @@ export default function FilterCard() {
   };
 
   return (
-    <div className="col-span-3 w-full max-w-[326px] rounded-[10px] bg-white p-6">
+    <div className="col-span-3 h-min w-full max-w-[326px] rounded-[10px] bg-white p-6">
       <div className="space-y-3">
         <h1 className="font-work text-2xl font-semibold text-brand-black">
           Custom Analysis
@@ -62,14 +62,14 @@ export default function FilterCard() {
           <Form.Item
             label={
               <span className="font-work text-base font-semibold text-brand-black">
-                Advokat Lawan
+                Advokat Dihadapi
               </span>
             }
             name="lawyer_enemy"
             className="mb-2 border-t pt-3"
             initialValue={searchParams.lawyer_enemy ?? ""}
           >
-            <Input placeholder="Cari advokat lawan" className="h-10" />
+            <Input placeholder="Cari advokat yang dihadapi" className="h-10" />
           </Form.Item>
           <Form.Item
             label={

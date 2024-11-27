@@ -27,7 +27,7 @@ export default function FilterCard() {
     const searchObj: Record<string, string | undefined> = {};
 
     if (judge) searchObj.judge = judge;
-    if (lawyer) searchObj.lawyer_enemy = lawyer;
+    if (lawyer) searchObj.lawyer = lawyer;
     if (location) searchObj.location = location;
     if (topic) searchObj.topic = topic;
 
@@ -43,7 +43,7 @@ export default function FilterCard() {
   };
 
   return (
-    <div className="col-span-3 w-full max-w-[326px] rounded-[10px] bg-white p-6">
+    <div className="col-span-3 h-min w-full max-w-[326px] rounded-[10px] bg-white p-6">
       <div className="space-y-3">
         <h1 className="font-work text-2xl font-semibold text-brand-black">
           Custom Analysis
@@ -66,18 +66,6 @@ export default function FilterCard() {
             initialValue={searchParams.lawyer ?? ""}
           >
             <Input placeholder="Cari advokat yang dihadapi" className="h-10" />
-          </Form.Item>
-          <Form.Item
-            label={
-              <span className="font-work text-base font-semibold text-brand-black">
-                Hakim Dihadapi
-              </span>
-            }
-            name="judge"
-            className="mb-2 border-t pt-3"
-            initialValue={searchParams.judge ?? ""}
-          >
-            <Input placeholder="Cari hakim yang dihadapi" className="h-10" />
           </Form.Item>
           <Form.Item
             label={

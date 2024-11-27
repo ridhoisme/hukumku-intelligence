@@ -6,6 +6,7 @@ import fetchInterceptor from "../../../config/axios";
 import { GeneralListCase } from "../../../type/general";
 import { formatDate } from "../../../utils/date";
 import ListCaseColumns from "./columns";
+import { useState } from "react";
 
 export default function ListCase() {
   const searchParams = useSearch({ from: "/_layout/general/$tab" });
@@ -18,6 +19,19 @@ export default function ListCase() {
       ),
   });
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(5);
+
+  const paginatedData = data.data.data.slice(
+    (currentPage - 1) * pageSize,
+    currentPage * pageSize,
+  );
+
+  const handlePageChange = (page: number, pageSize: number) => {
+    setCurrentPage(page);
+    setPageSize(pageSize);
+  };
+
   return (
     <div className="flex h-full w-full flex-col items-center justify-center gap-6 px-[50px] py-16">
       <div className="w-full max-w-brand-lg space-y-6">
@@ -26,7 +40,7 @@ export default function ListCase() {
             columns={ListCaseColumns()}
             rowKey={"id"}
             loading={isLoading}
-            dataSource={data.data.data}
+            dataSource={paginatedData}
             expandable={{
               expandIcon: ({ expanded, onExpand, record }) =>
                 expanded ? (
@@ -98,9 +112,11 @@ export default function ListCase() {
               ),
             }}
             pagination={false}
+            scroll={{ x: true }}
           />
         </div>
         <Pagination
+          onChange={handlePageChange}
           total={data.data.data.length}
           showTotal={(total, range) =>
             `${range[0]}-${range[1]} of ${total} items`
@@ -111,6 +127,7 @@ export default function ListCase() {
           locale={{ items_per_page: "" }}
           align="center"
           pageSizeOptions={[5, 10, 20, 40, 100]}
+          showSizeChanger
         />
       </div>
     </div>

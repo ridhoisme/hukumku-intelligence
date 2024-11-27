@@ -39,6 +39,7 @@ export default function JudgeListCaseColumns() {
       dataIndex: "title",
       key: "title",
       align: "left",
+      fixed: "left",
       filterDropdown: ({
         setSelectedKeys,
         selectedKeys,
@@ -74,15 +75,15 @@ export default function JudgeListCaseColumns() {
           setTimeout(() => searchInput.current?.select(), 100);
         }
       },
-      render: (val, rec) => (
-        <Link
+      render: (val) => (
+        <div
           className="line-clamp-3 font-work text-sm font-medium text-brand-blue-100"
-          to="/lawyer/$tab"
-          params={{ tab: "analysis" }}
-          search={{ id: rec.documentId }}
+          // to="/lawyer/$tab"
+          // params={{ tab: "analysis" }}
+          // search={{ id: rec.documentId }}
         >
           {val}
-        </Link>
+        </div>
       ),
     },
     {

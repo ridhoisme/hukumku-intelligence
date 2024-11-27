@@ -6,6 +6,7 @@ import fetchInterceptor from "../../../config/axios";
 import { LocationListCase } from "../../../type/location";
 import { formatDate } from "../../../utils/date";
 import LawyerListCaseColumns from "./columns";
+import { useState } from "react";
 
 export default function ListCase() {
   const searchParams = useSearch({ from: "/_layout/location/$tab" });
@@ -18,6 +19,20 @@ export default function ListCase() {
       ),
   });
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(5);
+
+  // Paginate the data manually
+  const paginatedData = data.data.data.slice(
+    (currentPage - 1) * pageSize,
+    currentPage * pageSize,
+  );
+
+  const handlePageChange = (page: number, pageSize: number) => {
+    setCurrentPage(page);
+    setPageSize(pageSize);
+  };
+
   return (
     <div className="flex h-full w-full flex-col items-center justify-center gap-6 px-[50px] py-16">
       <div className="w-full max-w-brand-lg space-y-6">
@@ -26,7 +41,7 @@ export default function ListCase() {
             columns={LawyerListCaseColumns()}
             rowKey={"id"}
             loading={isLoading}
-            dataSource={data.data.data}
+            dataSource={paginatedData}
             expandable={{
               expandIcon: ({ expanded, onExpand, record }) =>
                 expanded ? (
@@ -105,11 +120,13 @@ export default function ListCase() {
           showTotal={(total, range) =>
             `${range[0]}-${range[1]} of ${total} items`
           }
-          defaultPageSize={5}
-          defaultCurrent={1}
+          current={currentPage}
+          pageSize={pageSize}
           locale={{ items_per_page: "" }}
           align="center"
           pageSizeOptions={[5, 10, 20, 40, 100]}
+          showSizeChanger
+          onChange={handlePageChange}
         />
       </div>
     </div>

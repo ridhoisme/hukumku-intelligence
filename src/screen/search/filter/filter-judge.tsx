@@ -53,13 +53,13 @@ export default function FilterJudge() {
 
           return (
             <Link
+              key={val.documentId}
               to="/judge/$tab"
               params={{ tab: "analysis" }}
               search={{ id: val.documentId }}
               className="hover:text-inherit"
             >
               <CardSearch
-                key={val.documentId}
                 location={val.top_location}
                 title={val.name}
                 updatedAt={val.updatedAt}
@@ -72,11 +72,11 @@ export default function FilterJudge() {
           );
         })}
       </div>
-      {data.data.meta.pagination.pageCount > 1 && (
+      {data.data.meta.pagination.pageCount > 0 && (
         <Pagination
           showSizeChanger={false}
           align="center"
-          defaultCurrent={1}
+          pageSize={data.data.meta.pagination.pageSize}
           total={data.data.meta.pagination.total}
           onChange={handleChangePage}
         />

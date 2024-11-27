@@ -30,15 +30,15 @@ export default function TableCasesColumns() {
       filterMode: "menu",
       ellipsis: true,
       fixed: "left",
-      render: (val, rec) => (
-        <Link
+      render: (val) => (
+        <div
           className="font-work text-sm font-medium text-brand-blue-100"
-          to="/general/$tab"
-          params={{ tab: "analysis" }}
-          search={{ id: rec.documentId }}
+          // to="/general/$tab"
+          // params={{ tab: "analysis" }}
+          // search={{ id: rec.documentId }}
         >
           {val}
-        </Link>
+        </div>
       ),
     },
     {
