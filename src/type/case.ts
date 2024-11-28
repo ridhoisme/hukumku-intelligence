@@ -34,3 +34,18 @@ export type Cases = {
   data: Case[];
   meta: ResultMeta;
 };
+
+export type OngoingCaseProps = {
+  title: string;
+  topic: string;
+  register_date: string;
+  defendant: string;
+  plaintiff: string;
+  location: string;
+  case_status: string;
+};
+
+export type OngoingCases = {
+  data: OngoingCaseProps[];
+  meta: ResultMeta;
+};

@@ -1,42 +1,32 @@
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { Table, TableColumnsType } from "antd";
 import TableHead from "../../components/table/table-head";
-import { Link } from "@tanstack/react-router";
-import { useSuspenseQuery } from "@tanstack/react-query";
-import { getCases } from "../../queries/case";
-import { Case } from "../../type/case";
+import fetchInterceptor from "../../config/axios";
+import { OngoingCaseProps, OngoingCases } from "../../type/case";
 import { daysToToday, formatDateToShort } from "../../utils/date";
 
 export default function TableTrial() {
-  const { data: dataCase, isLoading } = useSuspenseQuery(
-    getCases({
-      filters: {
-        finish_date: {
-          $null: true,
-        },
-      },
-      populate: "*",
-    }),
-  );
+  const { data: dataCase, isLoading } = useSuspenseQuery({
+    queryKey: ["GET_GENERAL"],
+    queryFn: async () => await fetchInterceptor<OngoingCases>(`/ongoing-cases`),
+  });
 
-  const columns: TableColumnsType<Case> = [
+  const columns: TableColumnsType<OngoingCaseProps> = [
     {
       title: () => <TableHead title="Nomor Perkara" />,
-      dataIndex: "case_number",
-      key: "case_number",
+      dataIndex: "title",
+      key: "title",
       width: 180,
       ellipsis: true,
       render: (val) => (
-        <Link
-          className="font-work text-sm font-medium text-brand-blue-100 hover:text-brand-blue-100/80"
-          to="/"
-        >
+        <div className="font-work text-sm font-medium text-brand-blue-100 hover:text-brand-blue-100/80">
           {val}
-        </Link>
+        </div>
       ),
     },
     {
       title: () => <TableHead title="Tanggal Register" noWrapTitle />,
-      dataIndex: "start_date",
+      dataIndex: "register_date",
       key: "start_date",
       width: 140,
       align: "left",
@@ -48,7 +38,7 @@ export default function TableTrial() {
       key: "topic",
       width: 140,
       align: "left",
-      render: (_, rec) => rec.topic.name,
+      render: (_, rec) => rec.topic,
     },
     {
       title: () => <TableHead title="Para Pihak" noWrapTitle />,
@@ -57,21 +47,16 @@ export default function TableTrial() {
       width: 152,
       align: "left",
       render: (_, rec) => {
-        const { plaintiff, defendant } = rec;
+        const { plaintiff } = rec;
 
         return (
           <div className="flex flex-col gap-2">
             {
               <>
                 <div className="font-work text-xs text-brand-black">
-                  <span>Penggugat:</span>
+                  <span>Pelanggar:</span>
                   <br />
-                  <span className="font-medium">{plaintiff.name}</span>
-                </div>
-                <div className="font-work text-xs text-brand-black">
-                  <span>Tergugat:</span>
-                  <br />
-                  <span className="font-medium">{defendant.name}</span>
+                  <span className="font-medium">{plaintiff}</span>
                 </div>
               </>
             }
@@ -93,7 +78,7 @@ export default function TableTrial() {
       key: "on_going_proccess",
       width: 117,
       align: "left",
-      render: (_, rec) => `${daysToToday(rec.start_date)} Hari`,
+      render: (_, rec) => `${daysToToday(rec.register_date)} Hari`,
     },
     {
       title: () => <TableHead title="Lokasi Pengadilan" noWrapTitle />,
@@ -101,7 +86,7 @@ export default function TableTrial() {
       key: "location",
       width: 146,
       align: "left",
-      render: (_, rec) => rec.location.name,
+      render: (_, rec) => rec.location,
     },
   ];
 
@@ -112,16 +97,17 @@ export default function TableTrial() {
           Pengadilan Sidang Berjalan
         </h1>
         <div className="w-full rounded-md bg-white py-1">
-          <Table<Case>
+          <Table
             pagination={{
               total: dataCase.data.meta.pagination.total,
               showTotal: (total, range) =>
                 `${range[0]}-${range[1]} of ${total} items`,
-              defaultPageSize: dataCase.data.meta.pagination.pageSize,
+              defaultPageSize: 5,
               defaultCurrent: 1,
               locale: { items_per_page: "" },
               position: ["bottomCenter"],
               pageSizeOptions: [5, 10, 20, 40, 100],
+              showSizeChanger: true,
             }}
             bordered={false}
             className="m-4 font-work"
